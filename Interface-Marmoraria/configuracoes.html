@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações</title>
+</head>
+<body>
+
+    <section class="container">
+        <h2 id="empresaNome">Carregando...</h2>
+
+        <div class="options">
+
+            <a class="card" href="#" id="contratoCard">
+                <h3>Contrato</h3>
+            </a>
+
+            <a class="card" href="#" id="orcamentoCard">
+                <h3>Orçamento</h3>
+            </a>
+
+            <a class="card" href="#" id="reciboCard">
+                <h3>Recibo</h3>
+            </a>
+
+        </div>
+
+        <a href="escolha-empresa.html" class="voltar">Voltar</a>
+    </section>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const empresa = params.get("empresa");
+        const titulo = document.getElementById("empresaNome");
+
+      // Cor personalizada
+let corEmpresa = "#FFFFFF";
+
+// Caminhos dinâmicos dos documentos
+if (empresa === "1") {
+
+    titulo.textContent = "MS Marmoraria - Escolha o tipo de documento";
+    corEmpresa = "#FF0000"; // vermelho
+
+    document.getElementById("contratoCard").href = "Ms-Marmoraria/Contrato/index.html";
+    document.getElementById("orcamentoCard").href = "Ms-Marmoraria/Orcamento/indexorcamento.html"; 
+    document.getElementById("reciboCard").href = "Ms-Marmoraria/Recibo/indexrecibo.html";
+
+} else if (empresa === "2") {
+
+    titulo.textContent = "JD Marmoraria - Escolha o tipo de documento";
+    corEmpresa = "#00FF00"; // verde
+
+document.getElementById("contratoCard").href = "Jd-Marmoraria/ContratOjd/index.html";
+document.getElementById("orcamentoCard").href = "Jd-Marmoraria/Orcamentojd/indexorcamentojd.html";
+document.getElementById("reciboCard").href = "Jd-Marmoraria/Recibojd/indexrecibojd.html";
+
+} else {
+
+    titulo.textContent = "Empresa não identificada";
+}
+
+// Aplica a cor neon dos cards
+document.documentElement.style.setProperty('--cor1', corEmpresa);
+    </script>
+
+
+
+
+
+
+<style>
+
+/* Fundo e alinhamento total */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: url("img/6244745.jpg") no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+}
+
+/* Container central */
+.container {
+    text-align: center;
+    padding: 20px;
+    color: white;
+    max-width: 600px;
+}
+
+/* Título elegante */
+#empresaNome {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    font-weight: bold;
+    text-shadow: 0px 0px 10px black;
+}
+
+/* Cards */
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card {
+    text-decoration: none;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    backdrop-filter: blur(4px);
+    transition: 0.3s;
+    color: white;
+}
+
+.card h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+/* Efeito hover nos cards */
+.card:hover {
+    transform: translateY(-5px) scale(1.03);
+    border-color: var(--cor1);
+    box-shadow: 0 0 15px var(--cor1);
+}
+
+/* Botão voltar */
+.voltar {
+    display: inline-block;
+    margin-top: 25px;
+    color: #ddd;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.voltar:hover {
+    color: white;
+    text-shadow: 0 0 10px white;
+}
+
+
+</style>
+
+</body>
+</html>
