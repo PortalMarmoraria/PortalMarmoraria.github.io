@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Contrato JD Marmoraria</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Quill Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <!-- HTML2PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        /* ---------------------------------------------------------- */
+        /* NOVO DESIGN — TELA GERAL                                   */
+        /* ---------------------------------------------------------- */
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: url('/img/istockphoto-686470444-170667a.jpg') no-repeat center/cover fixed;
+        }
+
+        /* Form Container */
+        form {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(3px);
+        }
+
+        form h1 {
+            text-align: center;
+            color: #00ff00;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border-radius: 6px;
+            border: 1px solid #aaa;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #00ff00;
+            color: #fff;
+            border: none;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background: #00ff00;
+        }
+
+        /* Preview - Contrato Gerado */
+        #previewContainer {
+            background: #fff;
+            padding: 40px 55px;
+            margin: 40px auto;
+            max-width: 850px;
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.22);
+        }
+
+        /* ---------------------------------------------------------- */
+        /* ESTILO PDF — ÁREA DO CONTRATO                             */
+        /* ---------------------------------------------------------- */
+
+        #contrato {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #222;
+        }
+
+        #contrato header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        #contrato h2 {
+            font-size: 20px;
+            margin-bottom: 6px;
+            color: #00ff00;
+            font-weight: 600;
+        }
+
+        .titulo-01 {
+            font-size: 17px;
+            margin-top: 25px;
+            font-weight: bold;
+            color: #00ff00;
+            border-left: 5px solid #00ff00;
+            padding-left: 10px;
+        }
+
+        .sub-titulo {
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .assinaturas {
+            margin-top: 70px;
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .assinaturas div {
+            width: 45%;
+            text-align: center;
+        }
+
+        .linha-assinatura {
+            margin-top: 50px;
+            border-top: 1px solid #000;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .dataFinal {
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        #contrato * {
+            white-space: normal !important;
+            word-break: break-word;
+        }
+
+        .contratado {
+            font-size: 13px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .contratado h2 {
+            font-size: 12px;
+            margin: 2px 0;
+            font-weight: normal;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form id="formContrato">
+        <h1>Gerador de Contrato - JD Marmoraria</h1>
+
+        <h4>Nome do Cliente</h4>
+        <input type="text" id="nome" required />
+
+        <h4>CEP</h4>
+        <input type="text" id="cep" required />
+
+        <h4>Tipo do Documento</h4>
+        <select id="tipoId" required>
+            <option value="CPF">CPF</option>
+            <option value="CNPJ">CNPJ</option>
+        </select>
+
+        <h4>Número do CPF/CNPJ</h4>
+        <input type="text" id="cpfCnpj" required />
+
+        <h4>Endereço</h4>
+        <input type="text" id="endereco" required />
+
+        <h4>Produto/Serviço</h4>
+        <div id="produtoEditor"></div>
+
+        <h4>Valor (R$)</h4>
+        <input type="text" id="valor" required />
+
+        <h4>Valor por extenso</h4>
+        <input type="text" id="valorextenso" required />
+
+        <h4>Forma de pagamento</h4>
+        <input type="text" id="pagamento" required />
+
+        <h4>Prazo de entrega</h4>
+        <input type="text" id="prazo" required />
+
+        <h4>Data (dia/mês/ano)</h4>
+        <input type="text" id="dataano" required />
+
+        <button type="submit">Gerar Contrato</button>
+        <button type="button" id="downloadPDF">Baixar PDF</button>
+    </form>
+
+    <div id="previewContainer"></div>
+
+    <script>
+
+        /* ---------------------------------------------------------- */
+        /* QUILL EDITOR                                               */
+        /* ---------------------------------------------------------- */
+        const quill = new Quill('#produtoEditor', {
+            theme: 'snow',
+            placeholder: 'Descreva o produto/serviço...',
+            modules: {
+                toolbar: [
+                    [{ 'font': [] }, { 'size': [] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    ['clean']
+                ]
+            }
+        });
+
+        /* ---------------------------------------------------------- */
+        /* BUSCA CEP VIA VIACEP                                       */
+        /* ---------------------------------------------------------- */
+
+        document.getElementById('cep').addEventListener('blur', function () {
+            const cep = this.value.replace(/\D/g, '');
+            if (cep.length !== 8) return;
+
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(r => r.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById('endereco').value =
+                            `${data.logradouro}, ${data.bairro}, ${data.localidade} - ${data.uf}`;
+                    }
+                });
+        });
+
+        /* ---------------------------------------------------------- */
+        /* GERAR CONTRATO PREVIEW                                     */
+        /* ---------------------------------------------------------- */
+
+        const form = document.getElementById("formContrato");
+        const previewContainer = document.getElementById("previewContainer");
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const dados = {
+                nome: nome.value,
+                tipoId: tipoId.value,
+                cpfCnpj: cpfCnpj.value,
+                endereco: endereco.value,
+                cep: cep.value,
+                produto: quill.root.innerHTML,
+                valor: valor.value,
+                valorextenso: valorextenso.value,
+                pagamento: pagamento.value,
+                prazo: prazo.value,
+                dataano: dataano.value,
+                data: new Date().toLocaleDateString()
+            };
+
+            const contratoHTML = `
+      <div id="contrato" style= padding: 16px; max-width: 740px; margin:auto;">
+        <header style="text-align:center; margin-bottom:20px; margin-top:10px;">
+          <div class="photo">
+            <img src="img/Captura de tela 2025-11-28 233904.png" alt="Logo JD Marmoraria" width="200"/>
+          </div>
+          <h2>JD Marmoraria</h2>
+          <p>Data de emissão: ${dados.data}</p>
+        </header>
+        <div class="contratado">
+          <h3><b>Razão Social:</b> João de Deus Santos Figueiredo Eireli</h3>
+        <h3><b>CNPJ:</b> 16.432.895.0001/73</h3>
+          <h3><b>IE:</b> 90689920-4</h3>
+          <h3><b>ENDEREÇO FABRICA:</b> RUA DONA NENÊ, 171 BAIRRO ATUBA, CURITIBA-PR</h3><br><br>
+        </div>
+        <div class="titulo-01"><strong>CONTRATANTE</strong></div>
+        <p><strong>${dados.nome}</strong>, inscrito(a) no ${dados.tipoId} <strong>${dados.cpfCnpj}</strong>, situado na ${dados.endereco}, CEP:${dados.cep}.</p>
+        <div class="titulo-01"><strong>CONTRATADO</strong></div>
+        <div class="sub-titulo">
+          <p>As partes acima elencadas, contratante e Contratado, ﬁrmam entre si o presente Contrato de
+          Prestação de Serviço, conforme cláusulas a seguir: <br>
+            <b>Razão Social:</b> João de Deus Santos Figueiredo Eireli <br>
+            <b>CNPJ:</b> 16.432.895.0001/73 <br>
+            <b>IE:</b> 90689920-4 
+        </div>
+        <div class="titulo-01"><strong>CLAUSULA 1ª -DO OBJETO E EXECUÇA O DOS SERVIÇOS</strong></div>
+        <div class="sub-titulo">
+          <p>1.1 A CONTRATADA se obriga com o contratante à prestação de serviços, que se regerá pelas cláusulas e 
+          condições abaixo transcritas: <br>
+          1.2 A CONTRATADA se compromete a fornecer o seguinte material: </p> <br>
+        </div>
+        <div class="titulo-01"><strong>Produto/Serviço</strong></div>
+        <div>${dados.produto}</div>
+        <strong>Valor:</strong><strong>R$ ${dados.valor}</strong> <br><br>
+        <div class="titulo-01"><strong>CLAUSULA 2ª DO PREÇO</strong></div>
+        <div class="sub-titulo">
+          <p>1.3 Para execução dos serviços contratados no presente instrumento, o CONTRATANTE pagará á CONTRATADA <br>
+          o valor total de <strong>R$ ${dados.valor}</strong> (${dados.valorextenso}), ${dados.pagamento}</p> 
+
+
+        </div>
+        <div class="titulo-01"><strong>CLAUSULA 3ª DO PRAZO</strong></div>
+        <div class="sub-titulo">     
+          <p>1.4 O presente contrato entra em vigor na presente data, gerando direitos e deveres recíprocos,
+          obrigando se a CONTRATADA <br> á entregar o material no prazo de até ${dados.prazo}<br>
+          1.5 São obrigações do CONTRATADO: <br>
+          </p>
+        </div>
+        <div class="titulo-01"><strong>CLAUSULA 4ª - DAS OBRIGAÇOES DAS PARTES</strong></div>
+        <div class="sub-titulo">
+          <p>descritos neste contrato; <br>
+          a. Se responsabilizar pelos atos e omissões pracados por seus subordinados, bem como por quais quer <br>
+          danos que os mesmos venham a sofrer ou causar para o contratante ou terceiros; <br>
+          b. Providenciar os meios e os equipamentos necessários a correta execução dos serviços <br>
+          c. Fornecero produtoconforme descrito;</p>
+          1.6 São obrigações do CONTRATANTE: <br>
+          Fornece todas as informações necessárias a realização dos serviços; <br>
+          a. Realizar pagamento restante após término da instalação.
+          b.Providenciar um local para eventuais recortes e ajustes caso o <br> 
+          material seja instalado pelo a vidade;
+          </p> <br>
+        </div>
+        <div class="titulo-01"><strong>CLAUSULA 5ª DISPOSIÇÕES GERAIS</strong></div>
+        <div class="sub-titulo">
+          <p>a. A empresa CONTRATADA não faz instalação de hidráulica, elétrica ou quaisquer que saia do ramo de <br>
+          b. Granitos, mármores ou quartzitos são materiais extraídos da própria natureza, podendo ocorrer <br>
+          divergência de tonalidade entre um lote e outro! Como também podem conter veios, ﬁssuras que não <br>
+          compromete a resistência e durabilidade do material; <br>
+          c. A empresa CONTRATADA não tem por obrigação comprometer-se com a limpeza do ambiente, sendo o <br>
+          CONTRATANTE ciente da sujeira por conta de possíveis ajustes. <br> <br> <br> <br> <br>
+          </p>
+        </div>
+        <div class="bloco-final">
+          <h3>ASSINATURAS</h3>
+          <div class="assinaturas">
+            <div>
+              ___________________________<br/>
+              <strong>${dados.nome}</strong> <br/>
+              ${dados.tipoId} <strong>${dados.cpfCnpj}</strong>
+            </div>
+            <div>
+              ___________________________<br/>
+              <strong>JD Mármores e Granitos</strong><br/>
+              CNPJ: 16.432.895.0001/73
+            </div>
+          </div>
+          <div class="dataFinal">CURITIBA-PR ${dados.dataano}</div>
+        </div>
+      </div>
+    `;
+
+            previewContainer.innerHTML = contratoHTML; // ← AGORA FUNCIONA!
+        });
+
+
+        /* ---------------------------------------------------------- */
+        /* DOWNLOAD PDF                                                */
+        /* ---------------------------------------------------------- */
+
+        document.getElementById("downloadPDF").addEventListener("click", () => {
+            const contrato = document.getElementById("contrato");
+            if (!contrato) return alert("Gere o contrato primeiro!");
+
+            html2pdf().set({
+                filename: 'Contrato_JD_Marmoraria.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).from(contrato).save();
+        });
+
+    </script>
+
+</body>
+
+</html>
