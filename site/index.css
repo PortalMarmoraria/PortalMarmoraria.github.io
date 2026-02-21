@@ -1,0 +1,266 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* VARIÁVEIS DE TEMA */
+:root {
+  --ms-color: #c4161c;
+  --jd-color: #1f9d55;
+
+  --bg-dark: #0f172a;
+  --card-bg: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.15);
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+}
+
+/* BODY */
+body {
+  min-height: 100vh;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: radial-gradient(circle at top, #1e293b, #020617);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-main);
+}
+
+h1, h2 {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+p {
+  line-height: 1.6;
+}
+
+/* CONTAINER */
+.container {
+  width: 100%;
+  max-width: 960px;
+  padding: 24px;
+}
+
+/* BLOCO PRINCIPAL */
+.escolha-empresa {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 22px;
+  padding: 48px;
+  text-align: center;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(14px);
+}
+
+/* TÍTULOS */
+.escolha-empresa h1 {
+  font-size: 34px;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.escolha-empresa p {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-bottom: 45px;
+}
+
+/* GRID */
+.empresas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 36px;
+}
+
+/* CARD BASE */
+.empresa {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 36px 26px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.35s ease;
+  overflow: hidden;
+}
+
+/* EFEITO DE LUZ */
+.empresa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.empresa:hover::before {
+  opacity: 1;
+}
+
+/* HOVER GERAL */
+.empresa:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+}
+
+/* LOGO */
+.empresa img {
+  max-width: 110px;
+  margin-bottom: 18px;
+}
+
+/* NOME DA EMPRESA */
+.empresa h2 {
+  font-size: 40px;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+}
+
+/* DESCRIÇÃO */
+.empresa p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 26px;
+}
+
+/* BOTÃO */
+.empresa button {
+  border: none;
+  padding: 12px 34px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* ========================= */
+/* EMPRESA MS (VERMELHO) */
+/* ========================= */
+.empresa.ms {
+  border-color: rgba(196, 22, 28, 0.4);
+}
+
+.empresa.ms h2 {
+  color: var(--ms-color);
+}
+
+.empresa.ms button {
+  background: var(--ms-color);
+  color: #fff;
+}
+
+.empresa.ms button:hover {
+  background: #a31217;
+  transform: scale(1.08);
+}
+
+/* ========================= */
+/* EMPRESA JD (VERDE) */
+/* ========================= */
+.empresa.jd {
+  border-color: rgba(31, 157, 85, 0.4);
+}
+
+.empresa.jd h2 {
+  color: var(--jd-color);
+}
+
+.empresa.jd button {
+  background: var(--jd-color);
+  color: #fff;
+}
+
+.empresa.jd button:hover {
+  background: #157f43;
+  transform: scale(1.08);
+}
+
+/* RESPONSIVO */
+@media (max-width: 760px) {
+  .empresas {
+    grid-template-columns: 1fr;
+  }
+
+  .escolha-empresa {
+    padding: 36px 24px;
+  }
+}
+
+.empresas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  justify-items: center;
+}
+
+/* força os cards a não esticarem estranho */
+.empresa {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Orçamento ocupa linha de baixo */
+.empresa[data-doc="orcamento"] {
+  grid-column: 1 / span 2;
+  max-width: 420px;
+  justify-self: center;
+}
+
+.btn-voltar {
+  margin: 30px auto 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+
+  background: transparent;
+  color: #cbd5e1;
+
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 999px;
+
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.btn-voltar:hover {
+  background: rgba(255,255,255,.08);
+  color: #ffffff;
+  border-color: rgba(255,255,255,.45);
+  transform: translateY(-1px);
+}
+
+.myname {
+  position: fixed;
+  bottom: 15px;
+  left: 20px;
+  font-size: 13px;
+  opacity: 0.7;
+  transition: opacity .3s ease;
+}
+
+.myname:hover {
+  opacity: 1;
+}
+
+/* espaço pro footer fixo não cobrir conteúdo */
+body{
+  padding-bottom: 84px;
+}
+
+
+
+
+

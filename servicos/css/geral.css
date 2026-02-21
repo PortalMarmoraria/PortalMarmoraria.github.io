@@ -1,0 +1,372 @@
+
+  /* ====== FIX MASTER (resolve “caixas saindo”, overlap e etc) ====== */
+  *, *::before, *::after { box-sizing: border-box; }
+
+  :root{
+    --brand:#1f9d55; /* JD padrão */
+    --card:rgba(255,255,255,.92);
+    --card2:rgba(255,255,255,.96);
+    --shadow:0 18px 55px rgba(0,0,0,.45);
+    --text:#0f172a;
+  }
+
+  body{
+    font-family:'Inter', sans-serif;
+    margin:0;
+    padding:28px 16px;
+    background:
+      radial-gradient(900px 500px at 20% 0%, rgba(110,168,255,.12), transparent 60%),
+      radial-gradient(900px 500px at 80% 10%, rgba(255,110,227,.08), transparent 55%),
+      url('../img/istockphoto-686470444-170667a.jpg') no-repeat center/cover fixed;
+  }
+
+  .wrap{
+    max-width: 1080px;
+    margin: 0 auto;
+    background: rgba(15,23,42,.55);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+  }
+
+  .top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom: 14px;
+  }
+
+  .top .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 14px;
+    border-radius: 999px;
+    border:1px solid rgba(255,255,255,.18);
+    color:#e2e8f0;
+    background: rgba(255,255,255,.06);
+    font-weight:600;
+    font-size:13px;
+  }
+
+  .top .badge .dot{
+    width:10px; height:10px; border-radius:50%;
+    background: var(--brand);
+    box-shadow: 0 0 22px rgba(0,0,0,.25);
+  }
+
+  .btn-voltar{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 14px;
+    font-size:13px;
+    font-weight:600;
+    background: transparent;
+    color:#cbd5e1;
+    border:1px solid rgba(255,255,255,.22);
+    border-radius: 999px;
+    cursor:pointer;
+    transition: .25s;
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .btn-voltar:hover{
+    background: rgba(255,255,255,.08);
+    color:#fff;
+    transform: translateY(-1px);
+    border-color: rgba(255,255,255,.4);
+  }
+
+  form{
+    margin: 0 auto;
+    padding: 22px;
+    background: var(--card);
+    border-radius:16px;
+    box-shadow: 0 10px 28px rgba(0,0,0,.25);
+    overflow: hidden; /* evita “vazar” no canto direito */
+  }
+
+  form h1{
+    text-align:center;
+    color: var(--brand);
+    margin: 6px 0 16px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 14px;
+    align-items:start;
+    width: 100%;
+  }
+
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    min-width: 0; /* IMPORTANTÍSSIMO no grid, evita estourar */
+  }
+
+  .field.full{
+    grid-column: 1 / -1;
+  }
+
+  label{
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  input,select{
+    width:100%;
+    max-width: 100%;
+    min-width: 0;
+    padding:11px 12px;
+    border-radius:12px;
+    border:1px solid rgba(2,6,23,.18);
+    font-size:14px;
+    outline:none;
+    background: #fff;
+  }
+
+  input:focus, select:focus{
+    border-color: rgba(0,0,0,.25);
+    box-shadow: 0 0 0 4px rgba(31,157,85,.12);
+  }
+
+  #produtoEditor{
+    background:#fff;
+    border-radius: 12px;
+    overflow:hidden;
+    border:1px solid rgba(2,6,23,.18);
+    max-width: 100%;
+  }
+
+  /* Quill às vezes “vaza”, então limita */
+  .ql-toolbar, .ql-container{ max-width: 100%; }
+  .ql-editor{ min-height: 110px; }
+
+  .actions{
+    display:flex;
+    gap:10px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+
+  button{
+    padding:12px 18px;
+    background: var(--brand);
+    color:#fff;
+    border:none;
+    font-weight:800;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.2s;
+  }
+
+  button:hover{
+    filter: brightness(.95);
+    transform: translateY(-1px);
+  }
+
+  button.secondary{
+    background:#0f172a;
+  }
+
+  #previewContainer{
+    background: var(--card2);
+    padding:18px;
+    margin:18px auto 0;
+    max-width: 980px;
+    border-radius:16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.22);
+    overflow: hidden;
+  }
+
+  /* ====== DOCUMENTO (CENTRALIZAÇÃO REAL - A4 FEEL) ====== */
+  #contrato .doc{
+    background:#fff;
+    margin: 0 auto;
+    width: 190mm;       /* miolo A4 com respiro */
+    padding: 12mm;      /* margem interna */
+  }
+
+  #contrato{
+    font-size:14px;
+    line-height:1.6;
+    color:#222;
+  }
+
+  #contrato header{
+    text-align:center;
+    margin-bottom:20px;
+  }
+
+  #contrato h2{
+    font-size:20px;
+    margin:8px 0 6px;
+    color: var(--brand);
+    font-weight:800;
+    letter-spacing: -0.2px;
+  }
+
+  .titulo-01{
+    font-size:17px;
+    margin-top:18px;
+    font-weight:800;
+    color: var(--brand);
+    border-left:5px solid var(--brand);
+    padding-left:10px;
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  .sub-titulo{
+    margin-top:8px;
+    font-size:14px;
+  }
+
+  #contrato *{
+    white-space:normal !important;
+    word-break:break-word;
+  }
+
+  .contratado{
+    font-size:13px;
+    line-height:1.35;
+    margin-bottom:6px;
+  }
+
+  /* seção “inteligente”: tenta não quebrar no meio */
+  .secao{
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* ---------- PDF MODE ---------- */
+  body.pdf-mode{ background:#fff !important; }
+
+  body.pdf-mode .wrap{
+    background: #fff !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  body.pdf-mode #previewContainer{
+    box-shadow:none !important;
+    border-radius:0 !important;
+    padding:0 !important;
+    margin:0 !important;
+    max-width:none !important;
+    background:#fff !important;
+  }
+
+  body.pdf-mode #contrato .doc{
+    width: 190mm !important;
+    margin: 0 auto !important;
+    padding: 12mm !important;
+  }
+
+  /* ---------- QUEBRAS / PAGINAÇÃO ---------- */
+  .keep-together,
+  .keep-together *{
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .keep-with-next{
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  .page-break{
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+
+  /* ---------- ASSINATURAS (COM ESPAÇAMENTO MELHOR) ---------- */
+  .bloco-final{
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-top: 38px;        /* MAIS espaço em cima */
+    padding-top: 10px;       /* respiro interno (opcional) */
+    padding-bottom: 28px;    /* MAIS espaço em baixo */
+  }
+
+.bloco-final h3{
+  text-align:center;
+  margin:40px 0 120px; /* ↑ ↑ mais espaço em cima e embaixo */
+  font-weight:800;
+  letter-spacing: 0.5px;
+}
+
+  .assinaturas{
+    margin-top:26px;         /* mais espaço antes das linhas */
+    margin-bottom:26px;      /* mais espaço depois das assinaturas */
+    display:flex !important;
+    justify-content:space-between;
+    gap: 18mm;
+    align-items:flex-start;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .assinatura-item{
+    width: 78mm;
+    text-align:center;
+    padding: 0 2mm;
+    box-sizing:border-box;
+  }
+
+  .assinatura-linha{
+    width:100%;
+    border-top:2px solid #000;
+    margin:0 auto 10px auto;
+  }
+
+  .assinatura-nome{ font-weight:800; margin:0; }
+  .assinatura-doc{ margin:4px 0 0 0; font-size:13px; }
+
+  .dataFinal{
+    text-align:left;
+    margin-top:28px;         /* mais espaço antes da data */
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  @media (max-width: 860px){
+    .grid{
+      grid-template-columns: 1fr;
+    }
+    #previewContainer{
+      padding: 12px;
+    }
+    form{
+      padding: 18px;
+    }
+    .wrap{
+      padding: 16px;
+    }
+  }
+
+  /* pra caber melhor no celular sem quebrar tudo */
+  @media (max-width: 520px){
+    #contrato .doc{
+      width: 100%;
+      padding: 16px;
+    }
+    .assinaturas{
+      flex-direction:column;
+      gap: 20px;
+    }
+    .assinatura-item{
+      width: 100%;
+    }
+  }
