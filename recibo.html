@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../servicos/css/geral.css" />
+  <title>Recibo</title>
+
+  <!-- Fonte (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Quill Editor -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+  <!-- HTML2PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>html.auth-pending body{visibility:hidden}</style><script>document.documentElement.classList.add("auth-pending");</script></head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <a class="btn-voltar" href="../site/tipo.html">← Voltar</a>
+      <div class="badge">
+        <span class="dot"></span>
+        <span id="empresaBadge">Empresa</span>
+      </div>
+    </div>
+
+    <div class="conta-bar"><span id="contaDocumento">Acesso à nuvem</span><a href="../site/login.html">Entrar</a><a href="../site/historico.html">Meus documentos</a></div>
+    <form id="formRecibo">
+      <p class="eyebrow">PORTAL MARMORARIA / DOCUMENTOS</p><h1 id="tituloForm">Gerador de Recibo</h1>
+
+      <div class="grid">
+        <!-- NOME -->
+        <div class="field full">
+          <label for="nome">Nome do Cliente (pagador)</label>
+          <input type="text" id="nome" required placeholder="Ex: Eduardo Mathias" />
+        </div>
+
+        <!-- DOC -->
+        <div class="field">
+          <label for="tipoId">Tipo do Documento</label>
+          <select id="tipoId" required>
+            <option value="CPF">CPF</option>
+            <option value="CNPJ">CNPJ</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="cpfCnpj">Número do CPF/CNPJ</label>
+          <input type="text" id="cpfCnpj" required placeholder="000.000.000-00" />
+        </div>
+
+        <!-- REFERENTE A -->
+        <div class="field full">
+          <label>Referente a (descrição do serviço/produto pago)</label>
+          <div id="produtoEditor" aria-labelledby="produtoLabel"></div>
+        </div>
+
+        <!-- VALOR -->
+        <div class="field">
+          <label for="valor">Valor recebido</label>
+          <input type="text" id="valor" required placeholder="R$ 0,00" />
+        </div>
+
+        <div class="field">
+          <label for="valorextenso">Valor por extenso</label>
+          <input type="text" id="valorextenso" readonly placeholder="Gerado automaticamente" />
+        </div>
+
+        <!-- FORMA PAGAMENTO -->
+        <div class="field">
+          <label for="formaPagamento">Forma de pagamento</label>
+          <select id="formaPagamento" required>
+            <option value="" disabled selected>Selecione...</option>
+            <option value="Pix">Pix</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Cartão de crédito">Cartão de crédito</option>
+            <option value="Cartão de débito">Cartão de débito</option>
+            <option value="Transferência">Transferência</option>
+            <option value="Boleto">Boleto</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="statusPagamento">Status</label>
+          <select id="statusPagamento" required>
+            <option value="Pago" selected>Pago</option>
+            <option value="Parcial">Parcial</option>
+          </select>
+        </div>
+
+        <!-- DATA -->
+        <div class="field full">
+          <label for="dataano">Data (dia/mês/ano)</label>
+          <input type="text" id="dataano" required placeholder="dd/mm/aaaa" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit">Gerar Recibo</button>
+        <button class="secondary" type="button" id="downloadPDF" disabled>Baixar PDF</button>
+        <a class="btn-voltar novo-documento" href="recibo.html">Novo documento</a>
+      </div>
+    </form>
+
+    <p id="status" role="status" aria-live="polite"></p><button type="button" id="tentarSalvar" hidden>Tentar salvar novamente</button>
+    <div id="previewContainer"><div class="empty-preview"><span>PRÉVIA DO DOCUMENTO</span><h2>Seu documento começa aqui</h2><p>Preencha o formulário e clique em gerar para conferir o resultado.</p></div></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.7/dist/purify.min.js"></script>
+  <script src="js/empresas.js"></script>
+  <script src="js/portal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/dist/umd/supabase.js"></script>
+  <script src="../site/js/config.js"></script>
+  <script src="../site/js/banco.js"></script>
+  <script src="js/nuvem.js"></script>
+  <script src="js/recibo.js"></script>
+
+<script src="../site/js/proteger.js"></script></body>
+
+</html>
