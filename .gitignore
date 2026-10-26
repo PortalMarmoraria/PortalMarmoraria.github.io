@@ -1,6 +1,0 @@
-supabase/functions/.env
-.env
-.env.local
-
-node_modules/
-package-lock.json
