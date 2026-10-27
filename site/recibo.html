@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="../servicos/css/geral.css" />
-  <title>Contrato</title>
+  <link rel="stylesheet" href="geral.css" />
+  <title>Recibo</title>
 
-  <!-- Fonte profissional (Inter) -->
+  <!-- Fonte (Inter) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -30,27 +30,17 @@
     </div>
 
     <div class="conta-bar"><span id="contaDocumento">Acesso à nuvem</span><a href="../site/login.html">Entrar</a><a href="../site/historico.html">Meus documentos</a></div>
-    <form id="formContrato">
-      <p class="eyebrow">PORTAL MARMORARIA / DOCUMENTOS</p><h1 id="tituloForm">Gerador de Contrato</h1>
+    <form id="formRecibo">
+      <p class="eyebrow">PORTAL MARMORARIA / DOCUMENTOS</p><h1 id="tituloForm">Gerador de Recibo</h1>
 
       <div class="grid">
-        <!-- NOME (full) -->
+        <!-- NOME -->
         <div class="field full">
-          <label for="nome">Nome do Cliente</label>
+          <label for="nome">Nome do Cliente (pagador)</label>
           <input type="text" id="nome" required placeholder="Ex: Eduardo Mathias" />
         </div>
 
-        <!-- CEP + ENDEREÇO (lado a lado) -->
-        <div class="field">
-          <label for="cep">CEP</label>
-          <input type="text" id="cep" inputmode="numeric" required placeholder="00000-000" />
-        </div>
-
-        <div class="field">
-          <label for="endereco">Endereço</label>
-          <input type="text" id="endereco" required placeholder="Rua, número, bairro, cidade - UF" />
-        </div>
-
+        <!-- DOC -->
         <div class="field">
           <label for="tipoId">Tipo do Documento</label>
           <select id="tipoId" required>
@@ -64,13 +54,15 @@
           <input type="text" id="cpfCnpj" required placeholder="000.000.000-00" />
         </div>
 
+        <!-- REFERENTE A -->
         <div class="field full">
-          <label id="produtoLabel">Produto/Serviço</label>
+          <label>Referente a (descrição do serviço/produto pago)</label>
           <div id="produtoEditor" aria-labelledby="produtoLabel"></div>
         </div>
 
+        <!-- VALOR -->
         <div class="field">
-          <label for="valor">Valor</label>
+          <label for="valor">Valor recebido</label>
           <input type="text" id="valor" required placeholder="R$ 0,00" />
         </div>
 
@@ -79,24 +71,29 @@
           <input type="text" id="valorextenso" readonly placeholder="Gerado automaticamente" />
         </div>
 
+        <!-- FORMA PAGAMENTO -->
         <div class="field">
-          <label for="pagamento">Forma de pagamento</label>
-          <input type="text" id="pagamento" required placeholder="Ex: Entrada + restante na entrega" />
-        </div>
-
-        <div class="field">
-          <label for="prazo">Prazo de entrega</label>
-          <select id="prazo" required>
+          <label for="formaPagamento">Forma de pagamento</label>
+          <select id="formaPagamento" required>
             <option value="" disabled selected>Selecione...</option>
-            <option value="7 dias úteis">7 dias úteis</option>
-            <option value="10 dias úteis">10 dias úteis</option>
-            <option value="12 dias úteis">12 dias úteis</option>
-            <option value="15 dias úteis">15 dias úteis</option>
-            <option value="20 dias úteis">20 dias úteis</option>
-            <option value="30 dias úteis">30 dias úteis</option>
+            <option value="Pix">Pix</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Cartão de crédito">Cartão de crédito</option>
+            <option value="Cartão de débito">Cartão de débito</option>
+            <option value="Transferência">Transferência</option>
+            <option value="Boleto">Boleto</option>
           </select>
         </div>
 
+        <div class="field">
+          <label for="statusPagamento">Status</label>
+          <select id="statusPagamento" required>
+            <option value="Pago" selected>Pago</option>
+            <option value="Parcial">Parcial</option>
+          </select>
+        </div>
+
+        <!-- DATA -->
         <div class="field full">
           <label for="dataano">Data (dia/mês/ano)</label>
           <input type="text" id="dataano" required placeholder="dd/mm/aaaa" />
@@ -104,9 +101,9 @@
       </div>
 
       <div class="actions">
-        <button type="submit">Gerar Contrato</button>
+        <button type="submit">Gerar Recibo</button>
         <button class="secondary" type="button" id="downloadPDF" disabled>Baixar PDF</button>
-        <a class="btn-voltar novo-documento" href="contrato.html">Novo documento</a>
+        <a class="btn-voltar novo-documento" href="recibo.html">Novo documento</a>
       </div>
     </form>
 
@@ -121,10 +118,8 @@
   <script src="../site/js/config.js"></script>
   <script src="../site/js/banco.js"></script>
   <script src="js/nuvem.js"></script>
-  <script src="js/contrato.js"></script>
+  <script src="js/recibo.js"></script>
 
 <script src="../site/js/proteger.js"></script></body>
 
 </html>
-
-

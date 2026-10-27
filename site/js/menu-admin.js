@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 const scriptMenu=document.currentScript.src;
 (async()=>{
   try{

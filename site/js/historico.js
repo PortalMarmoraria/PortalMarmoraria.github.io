@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 let paginaAtual = 0, filtrosAtuais = {}, buscando = false, visualizacao = 0, excluindo = false;
 const nomesTipos = {contrato:"Contrato",recibo:"Recibo",orcamento:"Orçamento"};
 const statusArquivo = document.getElementById("status");
@@ -26,7 +26,7 @@ async function carregar() {
       ver.addEventListener("click",()=>visualizar(doc.id));acoes.appendChild(ver);
       if (Banco.permite("editar",doc)) {
         const editar = document.createElement("a");editar.textContent = "Editar";editar.className = "editar";
-        editar.href = `../servicos/${doc.tipo}.html?editar=${encodeURIComponent(doc.id)}&empresa=${doc.empresa}`;
+        editar.href = `${doc.tipo}.html?editar=${encodeURIComponent(doc.id)}&empresa=${doc.empresa}`;
         acoes.appendChild(editar);
       }
       if(Banco.permite("excluir",doc)){

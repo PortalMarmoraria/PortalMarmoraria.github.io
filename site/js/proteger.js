@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 // A proteção dos dados continua nas políticas do Supabase.
 // Este guard controla a navegação e evita exibir páginas antes da validação.
 const origemGuard = document.currentScript.src;
