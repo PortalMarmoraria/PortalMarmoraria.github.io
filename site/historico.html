@@ -1,1 +1,161 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Documentos · Portal Marmoraria</title><link rel="stylesheet" href="index.css"><link rel="stylesheet" href="conta.css"></head><body><header class="site-header"><a class="wordmark" href="../index.html"><span class="brand-icon">M</span> Portal Marmoraria</a><button id="sair" type="button">Sair</button></header><main class="container"><div class="step">ARQUIVO DE DOCUMENTOS</div><h1>Seus documentos.<br><span>Sempre à mão.</span></h1><p id="conta" class="intro"></p><a class="button" href="../index.html">+ Criar documento</a><p id="status" role="status" aria-live="polite"></p><button id="limparPDFs" type="button" hidden>Tentar remover PDFs pendentes</button><section id="arquivo" hidden><form id="filtros" class="panel filtros"><div><label for="nome">Cliente</label><input id="nome" placeholder="Pesquisar pelo nome" maxlength="120"></div><div><label for="empresa">Empresa</label><select id="empresa"><option value="">Todas</option><option>MS</option><option>JD</option></select></div><div><label for="tipo">Documento</label><select id="tipo"><option value="">Todos</option><option value="contrato">Contrato</option><option value="recibo">Recibo</option><option value="orcamento">Orçamento</option></select></div><div><label for="inicio">Data do documento: de</label><input id="inicio" type="date"></div><div><label for="fim">Até</label><input id="fim" type="date"></div><button type="submit">Buscar</button></form><p id="quantidade"></p><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Empresa</th><th>Documento</th><th>Data</th><th>Valor</th><th>Ações</th></tr></thead><tbody id="documentos"></tbody></table></div><nav class="paginacao" aria-label="Páginas do histórico"><button id="anterior" type="button">← Anterior</button><span id="pagina"></span><button id="proxima" type="button">Próxima →</button></nav></section><dialog id="visualizador" aria-labelledby="tituloPDF"><header><h2 id="tituloPDF">Visualizar documento</h2><button id="fechar" type="button">Fechar</button></header><p id="pdfStatus" role="status"></p><a id="baixar" target="_blank" rel="noopener noreferrer">Abrir PDF em outra aba / baixar</a><iframe id="pdfFrame" title="PDF do documento"></iframe><div id="detalhes"></div></dialog></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/dist/umd/supabase.js"></script><script src="js/config.js"></script><script src="js/banco.js"></script><script src="js/historico.js"></script><script src="js/gestao-api.js"></script><script src="js/menu-admin.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0a0b0c">
+  <title>Meus documentos · Portal Marmoraria</title>
+  <link rel="icon" type="image/png" href="../img/portal-simbolo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="historico">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar" aria-label="Menu lateral"></aside>
+    <div class="app-main">
+      <header class="topbar">
+        <nav class="topbar-context" aria-label="Você está em">
+          <a href="../index.html">Início</a><span class="sep" aria-hidden="true">/</span><strong>Meus documentos</strong>
+        </nav>
+      </header>
+
+      <main id="conteudo" class="page page-wide" tabindex="-1">
+        <header class="page-header">
+          <div class="page-header-text">
+            <h1 class="page-title">Meus documentos</h1>
+            <p class="page-lead" id="conta">Carregando perfil…</p>
+          </div>
+          <div class="page-actions">
+            <button id="limparPDFs" class="btn" type="button" hidden>Tentar remover PDFs pendentes</button>
+            <a class="btn btn-primary" href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Novo documento</a>
+          </div>
+        </header>
+
+        <div id="status" class="status-msg" role="status" aria-live="polite" data-status></div>
+
+        <div id="arquivo" class="history-layout" hidden>
+          <section class="panel table-panel" aria-labelledby="tituloLista" aria-busy="false">
+            <h2 class="sr-only" id="tituloLista">Lista de documentos</h2>
+            <form id="filtros" class="filters" role="search">
+              <div class="field">
+                <label for="nome">Cliente</label>
+                <div class="input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
+                  <input id="nome" class="input" type="search" placeholder="Buscar pelo nome do cliente" autocomplete="off">
+                </div>
+              </div>
+              <div class="field"><label for="empresa">Empresa</label><select id="empresa" class="select"><option value="">Todas</option><option>MS</option><option>JD</option></select></div>
+              <div class="field"><label for="tipo">Documento</label><select id="tipo" class="select"><option value="">Todos</option><option value="contrato">Contrato</option><option value="recibo">Recibo</option><option value="orcamento">Orçamento</option></select></div>
+              <div class="field"><label for="inicio">Data inicial</label><input id="inicio" class="input" type="date"></div>
+              <div class="field"><label for="fim">Data final</label><input id="fim" class="input" type="date"></div>
+              <button type="submit" class="btn btn-primary">Buscar</button>
+            </form>
+
+            <div class="results-bar">
+              <p id="quantidade" aria-live="polite"></p>
+              <span class="muted">Selecione uma linha para ver os detalhes</span>
+            </div>
+
+            <div class="table-wrap">
+              <table class="table table-cards history-table">
+                <caption class="sr-only">Documentos salvos. Selecione uma linha para ver detalhes.</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col">Empresa</th>
+                    <th scope="col">Data</th>
+                    <th scope="col" class="is-num">Valor</th>
+                    <th scope="col" class="is-num">Versão</th>
+                  </tr>
+                </thead>
+                <tbody id="documentos"></tbody>
+              </table>
+            </div>
+
+            <div class="pager">
+              <span id="pagina"></span>
+              <nav class="pager-controls" aria-label="Páginas do histórico">
+                <button id="anterior" class="btn btn-sm" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Anterior</button>
+                <button id="proxima" class="btn btn-sm" type="button">Próxima<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+              </nav>
+            </div>
+          </section>
+
+          <div class="detail-backdrop" id="detailBackdrop" aria-hidden="true"></div>
+          <aside class="panel history-side" id="painelDetalhes" aria-labelledby="tituloDetalhes">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title" id="tituloDetalhes">Detalhes do documento</h2>
+                <span id="pillSelecionado" class="panel-sub hidden">Documento selecionado</span>
+              </div>
+              <button id="fecharDetalhes" class="btn btn-ghost btn-sm btn-icon detail-close" type="button" aria-label="Fechar detalhes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+            </div>
+
+            <div class="detail-scroll" id="detailCard">
+              <div id="detailEmpty" class="empty-side">
+                <p>Selecione um documento para ver os dados, abrir o PDF, editar ou excluir conforme a sua permissão.</p>
+              </div>
+
+              <div id="detailContent" class="detail-content hidden">
+                <div>
+                  <h3 class="detail-title" id="detailCliente">—</h3>
+                  <p id="detailSub" class="detail-sub">—</p>
+                </div>
+                <div class="detail-total"><small>Valor do documento</small><strong id="detailValor">—</strong></div>
+                <div class="detail-meta">
+                  <div class="meta-row"><span>Documento</span><span id="detailTipo">—</span></div>
+                  <div class="meta-row"><span>Empresa</span><span id="detailEmpresa">—</span></div>
+                  <div class="meta-row"><span>Data</span><span id="detailData" class="num">—</span></div>
+                  <div class="meta-row"><span>Versão</span><span id="detailVersao" class="num">—</span></div>
+                </div>
+                <div class="side-actions">
+                  <button id="abrirVisualizacao" class="btn btn-primary" type="button">Abrir PDF</button>
+                  <a id="abrirNovaAba" class="btn btn-sm" href="#" target="_blank" rel="noopener noreferrer">Abrir em nova aba</a>
+                  <a id="editarSelecionado" href="#" class="btn btn-sm hidden">Editar documento</a>
+                  <button id="excluirSelecionado" type="button" class="btn btn-sm btn-danger hidden">Excluir documento</button>
+                </div>
+                <iframe id="previewFrame" class="preview-frame hidden" title="Pré-visualização do PDF"></iframe>
+                <div>
+                  <h4 class="detail-list-title">Dados preenchidos</h4>
+                  <div id="detailList" class="detail-list"></div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </main>
+      <footer class="app-footer">© <span id="ano"></span> Portal Marmoraria · Desenvolvido por <strong>Eduardo Mathias</strong></footer>
+    </div>
+  </div>
+
+  <dialog id="visualizador" class="dialog pdf-dialog" aria-labelledby="tituloPDF">
+    <header class="pdf-dialog-head">
+      <h2 id="tituloPDF">Visualizar documento</h2>
+      <button id="fechar" class="btn btn-sm" type="button">Fechar</button>
+    </header>
+    <div class="pdf-dialog-bar">
+      <p id="pdfStatus" role="status"></p>
+      <a id="baixar" class="btn btn-sm" target="_blank" rel="noopener noreferrer">Abrir em outra aba ou baixar</a>
+    </div>
+    <div class="pdf-dialog-body">
+      <iframe id="pdfFrame" title="PDF do documento"></iframe>
+      <div id="detalhes" class="pdf-dialog-fields" aria-label="Dados do documento"></div>
+    </div>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/dist/umd/supabase.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/banco.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/historico.js"></script>
+  <script src="js/gestao-api.js"></script>
+</body>
+</html>

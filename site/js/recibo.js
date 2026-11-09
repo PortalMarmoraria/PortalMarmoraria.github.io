@@ -9,7 +9,7 @@
     document.documentElement.style.setProperty("--brand", empresa.cor);
     document.title = `Recibo - ${empresa.nome}`;
     document.getElementById("empresaBadge").textContent = empresa.nome;
-    document.getElementById("tituloForm").textContent = `Gerador de Recibo - ${empresa.nome}`;
+    document.getElementById("tituloForm").textContent = new URLSearchParams(location.search).has("editar") ? "Editar recibo" : "Novo recibo";
 
     // ====== HELPERS ======
     function onlyDigits(v){ return (v || "").replace(/\D/g, ""); }

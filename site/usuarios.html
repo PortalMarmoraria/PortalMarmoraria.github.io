@@ -1,1 +1,138 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Usuários · Portal Marmoraria</title><link rel="stylesheet" href="index.css"><link rel="stylesheet" href="conta.css"></head><body><header class="site-header"><a class="wordmark" href="../index.html"><span class="brand-icon">M</span> Portal Marmoraria</a><a href="historico.html">Meus documentos</a></header><main class="container"><div class="step">ADMINISTRAÇÃO</div><h1>Gestão de<br><span>usuários.</span></h1><p id="status" role="status" aria-live="polite">Verificando acesso…</p><section id="gestao" hidden><p class="intro">Crie, edite e exclua contas com os perfis Colaborador, Comercial, Financeiro ou Administrador e defina novas senhas. Esta página é exclusiva da conta administradora principal.</p><form id="criarUsuario" class="panel filtros"><div><label for="nome">Nome</label><input id="nome" required maxlength="120" autocomplete="name"></div><div><label for="email">E-mail</label><input id="email" type="email" required maxlength="254" autocomplete="off"></div><div><label for="senha">Senha inicial</label><input id="senha" type="password" required minlength="8" maxlength="72" autocomplete="new-password"></div><div><label for="confirmarSenha">Confirmar senha</label><input id="confirmarSenha" type="password" required minlength="8" maxlength="72" autocomplete="new-password"></div><div><label for="perfilNovo">Perfil</label><select id="perfilNovo"><option value="colaborador">Colaborador</option><option value="comercial">Comercial</option><option value="financeiro">Financeiro</option><option value="admin">Administrador</option></select></div><fieldset id="criarEmpresas"><legend>Empresas autorizadas</legend><label><input type="checkbox" value="MS"> MS Marmoraria</label><label><input type="checkbox" value="JD"> JD Marmoraria</label></fieldset><button type="submit">Criar usuário</button></form><h2>Contas cadastradas</h2><button id="atualizar" type="button">Atualizar lista</button><div class="table-wrap" style="margin-top:16px"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Empresas</th><th>Status</th><th>Ações</th></tr></thead><tbody id="usuarios"></tbody></table></div><nav class="paginacao" aria-label="Páginas de usuários"><button id="anterior" type="button">← Anterior</button><span id="pagina"></span><button id="proxima" type="button">Próxima →</button></nav></section><dialog id="redefinir" aria-labelledby="tituloRedefinir"><form id="formRedefinir" class="panel"><h2 id="tituloRedefinir">Redefinir senha</h2><p id="usuarioAlvo"></p><label for="novaSenha">Nova senha</label><input id="novaSenha" type="password" required minlength="8" maxlength="72" autocomplete="new-password"><label for="confirmarNova">Confirmar nova senha</label><input id="confirmarNova" type="password" required minlength="8" maxlength="72" autocomplete="new-password"><p id="statusSenha" role="status" aria-live="polite"></p><button id="salvarSenha" type="submit">Confirmar redefinição</button><button id="cancelar" type="button">Cancelar</button></form></dialog><dialog id="editarUsuario" aria-labelledby="tituloEditar"><form id="formEditar" class="panel"><h2 id="tituloEditar">Editar usuário</h2><label for="editarNome">Nome</label><input id="editarNome" required maxlength="120"><label for="editarEmail">E-mail de login</label><input id="editarEmail" type="email" required maxlength="254"><label for="editarPerfil">Perfil</label><select id="editarPerfil"><option value="colaborador">Colaborador</option><option value="comercial">Comercial</option><option value="financeiro">Financeiro</option><option value="admin">Administrador</option></select><fieldset id="editarEmpresas"><legend>Empresas autorizadas</legend><label><input type="checkbox" value="MS"> MS Marmoraria</label><label><input type="checkbox" value="JD"> JD Marmoraria</label></fieldset><p>A mudança de e-mail será aplicada diretamente ao login. Administradores podem editar e excluir documentos; somente a conta principal gerencia usuários.</p><p id="erroEditar" role="status"></p><button type="submit">Salvar alterações</button><button type="button" id="cancelarEdicao">Cancelar</button></form></dialog></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/dist/umd/supabase.js"></script><script src="js/config.js"></script><script src="js/banco.js"></script><script src="js/gestao-api.js"></script><script src="js/usuarios.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0a0b0c">
+  <title>Gerenciar usuários · Portal Marmoraria</title>
+  <link rel="icon" type="image/png" href="../img/portal-simbolo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="usuarios">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar" aria-label="Menu lateral"></aside>
+    <div class="app-main">
+      <header class="topbar">
+        <nav class="topbar-context" aria-label="Você está em">
+          <span>Administração</span><span class="sep" aria-hidden="true">/</span><strong>Usuários</strong>
+        </nav>
+      </header>
+
+      <main id="conteudo" class="page" tabindex="-1">
+        <header class="page-header">
+          <div class="page-header-text">
+            <h1 class="page-title">Usuários <span id="countBadge" class="count" aria-label="contas nesta página">—</span></h1>
+            <p class="page-lead">Gerencie contas, perfis e as empresas que cada pessoa pode acessar.</p>
+          </div>
+          <div class="page-actions">
+            <button type="button" id="openCreate" class="btn btn-primary" aria-expanded="false" aria-controls="createPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar usuário</button>
+          </div>
+        </header>
+
+        <p id="status" class="status-msg" role="status" aria-live="polite" data-status>Verificando acesso…</p>
+
+        <section id="gestao" hidden>
+          <div id="createPanel" class="create-panel" hidden>
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2 class="panel-title" id="tituloCriar">Novo usuário</h2>
+                  <p class="panel-sub">A pessoa entra com o e-mail e a senha inicial definidos aqui.</p>
+                </div>
+                <button type="button" id="closeCreate" class="btn btn-ghost btn-sm btn-icon" aria-label="Fechar cadastro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              </div>
+              <form class="create-form" id="criarUsuario" aria-labelledby="tituloCriar">
+                <div class="field"><label for="nome">Nome</label><input class="input" autocomplete="name" id="nome" maxlength="120" required></div>
+                <div class="field"><label for="email">E-mail de acesso</label><input class="input" autocomplete="off" id="email" maxlength="254" required type="email"></div>
+                <div class="field"><label for="senha">Senha inicial</label><input class="input" autocomplete="new-password" id="senha" maxlength="72" minlength="8" required type="password" aria-describedby="dicaSenha"><p class="field-hint" id="dicaSenha">Mínimo de 8 caracteres.</p></div>
+                <div class="field"><label for="confirmarSenha">Confirmar senha</label><input class="input" autocomplete="new-password" id="confirmarSenha" maxlength="72" minlength="8" required type="password"></div>
+                <div class="field"><label for="perfilNovo">Perfil</label><select class="select" id="perfilNovo"><option value="colaborador">Colaborador</option><option value="comercial">Comercial</option><option value="financeiro">Financeiro</option><option value="admin">Administrador</option></select></div>
+                <fieldset class="fieldset" id="criarEmpresas"><legend>Empresas autorizadas</legend><div class="check-row"><label class="check"><input type="checkbox" value="MS"> MS Marmoraria</label><label class="check"><input type="checkbox" value="JD"> JD Marmoraria</label></div></fieldset>
+                <div class="create-form-actions">
+                  <button type="button" class="btn" data-fechar-cadastro>Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Criar usuário</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="panel table-panel">
+            <div class="toolbar">
+              <div class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
+                <input id="buscarUsuarios" class="input" type="search" aria-label="Buscar usuários desta página" placeholder="Buscar por nome ou e-mail">
+              </div>
+              <select id="filtrarPerfil" class="select" aria-label="Filtrar por perfil"><option value="">Todos os perfis</option><option value="admin">Administrador</option><option value="colaborador">Colaborador</option><option value="comercial">Comercial</option><option value="financeiro">Financeiro</option></select>
+              <button type="button" id="atualizar" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>Atualizar lista</button>
+            </div>
+            <div class="table-wrap">
+              <table class="table table-cards users-table">
+                <caption class="sr-only">Contas cadastradas no portal</caption>
+                <thead><tr><th scope="col">Nome</th><th scope="col">E-mail</th><th scope="col">Perfil</th><th scope="col">Empresas</th><th scope="col">Status</th><th scope="col" style="text-align:right">Ações</th></tr></thead>
+                <tbody id="usuarios"></tbody>
+              </table>
+            </div>
+            <footer class="pager">
+              <span id="filteredLabel">Contas cadastradas</span>
+              <nav class="pager-controls" aria-label="Paginação de usuários">
+                <button type="button" id="anterior" class="btn btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Anterior</button>
+                <span id="pagina" class="num">Página 1</span>
+                <button type="button" id="proxima" class="btn btn-sm">Próxima<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+              </nav>
+            </footer>
+          </div>
+        </section>
+      </main>
+      <footer class="app-footer">© <span id="ano"></span> Portal Marmoraria · Desenvolvido por <strong>Eduardo Mathias</strong></footer>
+    </div>
+  </div>
+
+  <dialog class="dialog" aria-labelledby="tituloRedefinir" id="redefinir">
+    <form class="dialog-body" id="formRedefinir">
+      <div>
+        <h2 class="dialog-title" id="tituloRedefinir">Redefinir senha</h2>
+        <p class="dialog-text" id="usuarioAlvo"></p>
+      </div>
+      <div class="field"><label for="novaSenha">Nova senha</label><input class="input" autocomplete="new-password" id="novaSenha" maxlength="72" minlength="8" required type="password"></div>
+      <div class="field"><label for="confirmarNova">Confirmar nova senha</label><input class="input" autocomplete="new-password" id="confirmarNova" maxlength="72" minlength="8" required type="password"></div>
+      <p class="dialog-msg" aria-live="polite" id="statusSenha" role="status"></p>
+      <div class="dialog-actions">
+        <button class="btn" id="cancelar" type="button">Cancelar</button>
+        <button class="btn btn-primary" id="salvarSenha" type="submit">Redefinir senha</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" aria-labelledby="tituloEditar" id="editarUsuario">
+    <form class="dialog-body" id="formEditar">
+      <h2 class="dialog-title" id="tituloEditar">Editar usuário</h2>
+      <div class="field"><label for="editarNome">Nome</label><input class="input" id="editarNome" maxlength="120" required></div>
+      <div class="field"><label for="editarEmail">E-mail de acesso</label><input class="input" id="editarEmail" maxlength="254" required type="email" aria-describedby="avisoEmail"></div>
+      <div class="field"><label for="editarPerfil">Perfil</label><select class="select" id="editarPerfil"><option value="colaborador">Colaborador</option><option value="comercial">Comercial</option><option value="financeiro">Financeiro</option><option value="admin">Administrador</option></select></div>
+      <fieldset class="fieldset" id="editarEmpresas"><legend>Empresas autorizadas</legend><div class="check-row"><label class="check"><input type="checkbox" value="MS"> MS Marmoraria</label><label class="check"><input type="checkbox" value="JD"> JD Marmoraria</label></div></fieldset>
+      <p class="field-hint" id="avisoEmail">A mudança de e-mail vale imediatamente para o login. Administradores podem editar e excluir documentos; somente a conta principal gerencia usuários.</p>
+      <p class="dialog-msg" id="erroEditar" role="status" aria-live="polite"></p>
+      <div class="dialog-actions">
+        <button class="btn" id="cancelarEdicao" type="button">Cancelar</button>
+        <button class="btn btn-primary" type="submit">Salvar alterações</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/dist/umd/supabase.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/banco.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/gestao-api.js"></script>
+  <script src="js/usuarios.js"></script>
+  <script src="js/usuarios-ui.js"></script>
+</body>
+</html>

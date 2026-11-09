@@ -103,38 +103,55 @@ O GitHub Pages é responsável por disponibilizar a interface web. O Supabase fo
 
 ```text
 PortalMarmoraria.github.io/
-|
-├── index.html
-├── principal.html
+├── index.html                 Início (empresas, perfil, documentos recentes)
+├── principal.html             Redireciona para index.html
 ├── README.md
-|
+├── docs/                      Auditoria, design, alterações e relatório de testes
 ├── img/
-│   ├── JD.png
-│   └── MS.png
-|
-├── site/
-│   ├── login.html
-│   ├── tipo.html
-│   ├── contrato.html
-│   ├── orcamento.html
-│   ├── recibo.html
-│   ├── historico.html
-│   ├── usuarios.html
-│   ├── index.css
-│   ├── conta.css
-│   ├── geral.css
-│   └── js/
-│       ├── config.js
-│       ├── banco.js
-│       ├── login.js
-│       ├── proteger.js
-│       ├── gestao-api.js
-│       └── ...
-|
-└── servicos/
+│   ├── MS.png · JD.png        Logos das empresas (usados também no PDF)
+│   ├── portal-logo.png        Logo oficial completo
+│   └── portal-simbolo.png     Símbolo do logo (sidebar e favicon)
+└── site/
+    ├── login.html · tipo.html · contrato.html · recibo.html · orcamento.html
+    ├── historico.html · usuarios.html · usuario-detalhes.html
+    ├── css/
+    │   ├── tokens.css         Design tokens (cores, tipografia, espaço, movimento)
+    │   ├── base.css · layout.css · components.css · pages.css · login.css
+    │   ├── documento-form.css Formulários e prévia
+    │   └── documento-pdf.css  Regras do documento/PDF (não editar sem revisar o PDF)
+    └── js/
+        ├── config.js · banco.js · proteger.js · gestao-api.js   Dados e acesso
+        ├── empresas.js · portal.js · nuvem.js                   PDF e salvamento
+        ├── contrato.js · recibo.js · orcamento.js               Documentos
+        ├── ui.js                                                Sidebar e interface compartilhada
+        ├── documento-ui.js                                      Estados visuais dos formulários
+        ├── correcao-logo-pdf.js                                 Correção proposta (não ativada)
+        └── login.js · index.js · tipo.js · historico.js · usuarios.js · usuarios-ui.js · usuario-detalhes.js
 ```
 
-*A estrutura apresenta os principais arquivos do frontend, sem listar todos os módulos JavaScript.*
+---
+
+## 🎨 Interface
+
+O redesign transforma as páginas em um único produto: sidebar fixa à esquerda em todas as telas administrativas, topbar com o usuário autenticado, superfícies em granito escuro, ação primária em branco Carrara e acento petróleo extraído do logo. As cores MS e JD aparecem somente onde identificam a empresa.
+
+- Desktop: sidebar completa · Tablet: trilho de ícones · Celular: menu sobreposto acessível.
+- Acessibilidade: HTML semântico, rótulos associados, navegação por teclado, foco visível, modais nativos com foco, contraste AA e respeito a `prefers-reduced-motion`.
+- Detalhes em [`docs/DESIGN.md`](docs/DESIGN.md).
+
+**Regra de manutenção:** o conteúdo e o estilo do PDF ficam em `site/css/documento-pdf.css` e nos templates de `contrato.js`, `recibo.js` e `orcamento.js`. Mudanças de interface não devem tocar nesses pontos.
+
+---
+
+## 💻 Executar localmente
+
+O projeto é estático e não tem etapa de build.
+
+```bash
+python3 -m http.server 8080
+```
+
+Abra `http://localhost:8080/site/login.html`. O login usa o Supabase configurado em `site/js/config.js`. Abrir os arquivos com `file://` não funciona por causa dos caminhos e do Supabase.
 
 ---
 
@@ -160,11 +177,13 @@ Chaves secretas, credenciais administrativas e senhas não devem ser armazenadas
 
 ### GitHub Pages
 
-O frontend é publicado a partir da branch `main` e da raiz do repositório.
+1. Envie todos os arquivos para a branch `main`, mantendo `index.html` na raiz.
+2. Em `Settings → Pages → Build and deployment`, escolha **Deploy from a branch**, branch `main`, pasta `/ (root)`.
+3. Aguarde a publicação e acesse `https://<usuario>.github.io/`.
+4. Remova do repositório os CSS e JS antigos listados em [`docs/ALTERACOES.md`](docs/ALTERACOES.md), caso ainda existam.
+5. Depois de publicar, force a atualização do navegador (Ctrl+F5) para não usar CSS antigo do cache.
 
-A configuração de hospedagem é feita em:
-
-`Settings → Pages → Build and deployment`
+Todos os caminhos são relativos; o site funciona tanto na raiz de um domínio quanto em subpasta.
 
 ### Supabase
 
@@ -178,6 +197,12 @@ O projeto requer:
 6. URL pública e chave publishable configuradas no frontend.
 
 A implantação do GitHub Pages não cria automaticamente a infraestrutura de banco de dados.
+
+---
+
+## ✅ Testes
+
+O relatório completo, com o que foi e o que não foi testado, está em [`docs/RELATORIO-TESTES.md`](docs/RELATORIO-TESTES.md).
 
 ---
 

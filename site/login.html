@@ -1,1 +1,96 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Entrar · Portal Marmoraria</title><link rel="stylesheet" href="index.css"><link rel="stylesheet" href="conta.css"></head><body><header class="site-header"><a class="wordmark" href="../index.html"><span class="brand-icon">M</span> Portal Marmoraria</a><a href="../index.html">Voltar ao início</a></header><main class="container login-container"><div class="step">ACESSO AOS DOCUMENTOS</div><h1>Entre na<br><span>sua conta.</span></h1><p class="intro">Acesse os documentos e empresas autorizados para o seu perfil.</p><form id="loginForm" class="panel"><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required><label for="senha">Senha</label><input id="senha" type="password" autocomplete="current-password" required><button id="entrar" type="submit">Entrar</button><p id="status" role="status" aria-live="polite"></p></form></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/dist/umd/supabase.js"></script><script src="js/config.js"></script><script src="js/banco.js"></script><script src="js/login.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0b0c">
+  <title>Entrar · Portal Marmoraria</title>
+  <link rel="icon" type="image/png" href="../img/portal-simbolo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body class="login-page">
+  <main class="login-shell">
+    <section class="login-panel" aria-labelledby="tituloLogin">
+      <a href="../index.html" class="login-brand" aria-label="Portal Marmoraria">
+        <img src="../img/portal-simbolo.png" alt="" width="22" height="42">
+        <span><strong>Portal</strong><span>Marmoraria</span></span>
+      </a>
+
+      <div class="login-body">
+        <h1 class="login-title" id="tituloLogin">Entrar no portal</h1>
+        <p class="login-subtitle">Use sua senha ou receba um código no e-mail cadastrado.</p>
+
+        <div class="mode-switch" role="group" aria-label="Forma de entrar">
+          <span class="mode-indicator" aria-hidden="true"></span>
+          <button type="button" class="mode-btn active" id="tabPassword" aria-pressed="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V8a4 4 0 0 1 8 0v2"/></svg>
+            Senha
+          </button>
+          <button type="button" class="mode-btn" id="tabCode" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg>
+            Código por e-mail
+          </button>
+        </div>
+
+        <form id="loginForm" class="form-area">
+          <div class="field">
+            <label for="email">E-mail</label>
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg>
+              <input class="input" id="email" name="email" type="email" placeholder="voce@exemplo.com" autocomplete="username" maxlength="254" required>
+            </div>
+          </div>
+
+          <div class="field password-mode">
+            <label for="senha">Senha</label>
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V8a4 4 0 0 1 8 0v2"/></svg>
+              <input class="input has-action" id="senha" name="senha" type="password" placeholder="Digite sua senha" autocomplete="current-password" required>
+              <button class="password-eye" id="toggleSenha" type="button" aria-label="Mostrar senha" aria-pressed="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="codeStep" class="field code-mode hidden">
+            <label for="codigoEmail">Código recebido por e-mail</label>
+            <div class="input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6"/></svg>
+              <input class="input code-input" id="codigoEmail" name="codigoEmail" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="000000" maxlength="8" pattern="[0-9]{6,8}" disabled>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block submit-btn" id="entrar"><span id="submitText">Entrar</span><svg class="submit-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <p class="helper code-helper hidden" id="codeHelper">Enviaremos um código para o e-mail cadastrado.</p>
+          <p id="status" class="status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <p class="login-foot">Acesso exclusivo para contas criadas pelo administrador. Para recuperar a senha, fale com o administrador do portal.</p>
+    </section>
+
+    <section class="login-slab" aria-hidden="true">
+      <div class="slab-content">
+        <img src="../img/portal-simbolo.png" alt="" class="slab-symbol" width="64" height="120">
+        <p class="slab-title">Contratos, recibos e orçamentos da MS e da JD Marmoraria em um só lugar.</p>
+        <ul class="slab-list">
+          <li><span class="company-badge ms">MS</span><span class="company-badge jd">JD</span> Identidade de cada empresa no PDF</li>
+          <li>Documentos salvos na nuvem com histórico e versões</li>
+          <li>Acesso conforme o perfil de cada pessoa</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/dist/umd/supabase.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/banco.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

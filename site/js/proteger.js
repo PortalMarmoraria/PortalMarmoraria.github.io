@@ -12,8 +12,12 @@ const origemGuard = document.currentScript.src;
       const tipo=href.pathname.split("/").pop().replace(".html","");
       if(["contrato","recibo","orcamento"].includes(tipo)){
         const escolhida=new URLSearchParams(location.search).get("empresa") || localStorage.getItem("empresaSelecionada");
-        card.hidden=!Banco.permite("criar",{empresa:escolhida,tipo});
-        href.searchParams.set("empresa",escolhida);card.href=href.href;
+        const permitido=Banco.permite("criar",{empresa:escolhida,tipo});
+        href.searchParams.set("empresa",escolhida);
+        // Sem permissão: o card continua visível como indisponível e deixa de ser link.
+        // A autorização real permanece em Nuvem/Banco e nas políticas do Supabase.
+        if(permitido){card.href=href.href;card.removeAttribute("aria-disabled");card.classList.remove("is-unavailable");}
+        else{card.removeAttribute("href");card.setAttribute("aria-disabled","true");card.classList.add("is-unavailable");}
       }
     }
     if(location.pathname.endsWith("/tipo.html")){

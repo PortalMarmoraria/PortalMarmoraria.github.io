@@ -9,7 +9,7 @@
     document.documentElement.style.setProperty("--brand", empresa.cor);
     document.title = `Orçamento - ${empresa.nome}`;
     document.getElementById("empresaBadge").textContent = empresa.nome;
-    document.getElementById("tituloForm").textContent = `Gerador de Orçamento - ${empresa.nome}`;
+    document.getElementById("tituloForm").textContent = new URLSearchParams(location.search).has("editar") ? "Editar orçamento" : "Novo orçamento";
 
     // ====== HELPERS ======
     function onlyDigits(v){ return (v || "").replace(/\D/g, ""); }

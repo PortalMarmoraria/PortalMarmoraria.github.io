@@ -1,0 +1,147 @@
+/* ==========================================================================
+   Login
+   ========================================================================== */
+.login-page { min-height: 100vh; min-height: 100dvh; }
+.login-shell {
+  display: grid;
+  grid-template-columns: minmax(380px, 520px) minmax(0, 1fr);
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+.login-panel {
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-8) var(--sp-10);
+  background: var(--stone-950);
+  border-right: var(--border);
+}
+.login-brand { display: inline-flex; align-items: center; gap: var(--sp-3); color: var(--carrara); text-decoration: none; align-self: flex-start; border-radius: var(--r-sm); }
+.login-brand img { width: 22px; height: 42px; object-fit: contain; }
+.login-brand > span { display: grid; line-height: 1.1; }
+.login-brand strong { font-size: var(--fs-base); font-weight: 700; letter-spacing: var(--tracking-tight); }
+.login-brand > span > span { font-size: var(--fs-xs); color: var(--text-muted); }
+
+.login-body { margin: auto 0; padding: var(--sp-10) 0; width: 100%; max-width: 380px; }
+.login-title { margin: 0; font-size: var(--fs-3xl); font-weight: 700; line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); color: var(--carrara); }
+.login-subtitle { margin: var(--sp-2) 0 var(--sp-6); font-size: var(--fs-base); color: var(--text-muted); }
+
+/* Seletor segmentado com indicador deslizante */
+.mode-switch {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  margin-bottom: var(--sp-5);
+  border: var(--border);
+  border-radius: var(--r-md);
+  background: var(--stone-900);
+}
+.mode-indicator {
+  position: absolute;
+  top: 4px; bottom: 4px; left: 4px;
+  width: calc(50% - 4px);
+  border-radius: var(--r-sm);
+  background: var(--stone-750);
+  box-shadow: var(--edge), var(--shadow-sm);
+  transition: transform var(--dur) var(--ease-out);
+}
+.mode-switch:has(#tabCode.active) .mode-indicator { transform: translateX(100%); }
+.mode-btn {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  height: 36px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.mode-btn:hover { color: var(--carrara); }
+.mode-btn.active { color: var(--carrara); }
+.mode-btn svg { width: 15px; height: 15px; stroke: currentColor; stroke-width: 1.8; fill: none; flex-shrink: 0; }
+
+.form-area { display: grid; gap: var(--sp-4); }
+.form-area .field.code-mode:not(.hidden) { animation: rise-in var(--dur-slow) var(--ease-out); }
+.input.has-action { padding-right: 44px; }
+.password-eye {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-muted);
+}
+.password-eye:hover { color: var(--carrara); background: var(--stone-800); }
+.password-eye svg { width: 17px; height: 17px; stroke: currentColor; stroke-width: 1.8; fill: none; }
+.password-eye[aria-pressed="true"] { color: var(--accent-soft); }
+.code-input { font-family: var(--font-mono); letter-spacing: .3em; font-size: var(--fs-lg); }
+
+.submit-btn { height: 46px; margin-top: var(--sp-1); }
+.submit-arrow { transition: transform var(--dur) var(--ease-out); }
+.submit-btn:hover .submit-arrow { transform: translateX(3px); }
+.submit-btn:disabled { opacity: .7; }
+.submit-btn:disabled .submit-arrow { display: none; }
+.submit-btn:disabled::after {
+  content: "";
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: spin .7s linear infinite;
+}
+
+.helper { margin: 0; font-size: var(--fs-sm); color: var(--text-muted); line-height: var(--lh-body); }
+.status { margin: 0; font-size: var(--fs-sm); line-height: var(--lh-body); color: var(--text-muted); }
+.status:empty { display: none; }
+.status.error, .status.success {
+  padding: var(--sp-3) var(--sp-4);
+  border: var(--border);
+  border-radius: var(--r-md);
+  animation: status-in var(--dur-slow) var(--ease-out);
+}
+.status.error { color: #ffd0d0; border-left: 3px solid var(--danger); background: var(--danger-tint); }
+.status.success { color: var(--text); border-left: 3px solid var(--success); background: var(--success-tint); }
+
+.login-foot { margin: 0; font-size: var(--fs-xs); color: var(--text-subtle); line-height: var(--lh-body); max-width: 380px; }
+
+/* Placa de granito com veio de mármore discreto */
+.login-slab {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: var(--sp-12);
+  overflow: hidden;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 900' fill='none' stroke='%23ffffff' stroke-linecap='round'%3E%3Cpath d='M-20 610C120 560 210 430 330 410s190 70 300 20 130-170 220-210' stroke-width='1.4' opacity='.07'/%3E%3Cpath d='M330 410c20 70 80 110 60 200s30 140 90 190' stroke-width='.8' opacity='.05'/%3E%3Cpath d='M630 430c-10 80 40 140 120 170' stroke-width='.7' opacity='.045'/%3E%3Cpath d='M80 900c60-90 160-120 230-100s120 10 180-50' stroke-width='1' opacity='.045'/%3E%3Cpath d='M480 -20c-20 100 20 170 120 220s110 130 90 210' stroke-width='.8' opacity='.045'/%3E%3C/svg%3E") center / cover no-repeat,
+    radial-gradient(90% 70% at 80% 10%, rgba(63, 147, 167, .16), transparent 60%),
+    linear-gradient(160deg, #121517 0%, #0b0d0e 100%);
+}
+.slab-content { position: relative; max-width: 520px; }
+.slab-symbol { width: 44px; height: auto; margin-bottom: var(--sp-6); display: block; }
+.slab-title { margin: 0 0 var(--sp-6); font-size: var(--fs-2xl); line-height: 1.3; font-weight: 600; letter-spacing: var(--tracking-tight); color: var(--carrara); }
+.slab-list { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--sp-3); }
+.slab-list li { display: flex; align-items: center; gap: var(--sp-2); padding-top: var(--sp-3); border-top: var(--border); font-size: var(--fs-md); color: var(--text-muted); }
+
+@media (max-width: 900px) {
+  .login-shell { grid-template-columns: minmax(0, 1fr); }
+  .login-slab { display: none; }
+  .login-panel { border-right: 0; padding: var(--sp-6) var(--sp-5); }
+  .login-body { margin: auto; padding: var(--sp-8) 0; }
+  .login-foot { margin: 0 auto; text-align: center; }
+}
+@media (max-width: 420px) {
+  .login-title { font-size: var(--fs-2xl); }
+  .mode-btn { font-size: var(--fs-xs); }
+}

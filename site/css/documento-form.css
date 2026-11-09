@@ -1,0 +1,159 @@
+/* ==========================================================================
+   Formulários de contrato, recibo e orçamento.
+   Somente a interface de preenchimento. O documento (#contrato) e o PDF
+   continuam definidos por documento-pdf.css.
+   ========================================================================== */
+.doc-header .badge { margin-bottom: var(--sp-3); }
+.doc-company-badge { --company: var(--brand, var(--accent)); color: var(--carrara); }
+.doc-company-badge .dot { background: var(--company); }
+
+.doc-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-5);
+  align-items: start;
+}
+.doc-column { display: grid; gap: var(--sp-4); min-width: 0; }
+
+.doc-form { padding: 0; overflow: visible; }
+.doc-form[inert] { opacity: .6; transition: opacity var(--dur) var(--ease-out); }
+
+.form-section {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: var(--sp-6);
+  padding: var(--sp-6);
+  border-bottom: var(--border);
+}
+.form-section-head h2 { margin: 0; font-size: var(--fs-base); font-weight: 700; color: var(--carrara); letter-spacing: -0.01em; }
+.form-section-head p { margin: 4px 0 0; font-size: var(--fs-sm); color: var(--text-muted); line-height: var(--lh-body); }
+
+.form-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--sp-4); }
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: span 3; }
+.span-4 { grid-column: span 4; }
+.span-6 { grid-column: 1 / -1; }
+
+.form-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  padding: var(--sp-4) var(--sp-6);
+  background: rgba(16, 18, 20, .94);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+}
+.form-actions .novo-documento { margin-left: auto; }
+.form-actions-note { flex-basis: 100%; margin: 0; font-size: var(--fs-xs); color: var(--text-muted); }
+
+.save-status { display: grid; gap: var(--sp-2); }
+.save-status #status { margin: 0; }
+.save-status #tentarSalvar { justify-self: start; }
+
+/* ---------- Editor Quill (tema escuro) ---------- */
+#produtoEditor { min-width: 0; }
+.doc-form .ql-toolbar.ql-snow {
+  border: 1px solid var(--line-strong);
+  border-bottom: var(--border);
+  border-radius: var(--r-md) var(--r-md) 0 0;
+  background: var(--stone-850);
+  padding: 6px 8px;
+  font-family: var(--font-sans);
+}
+.doc-form .ql-container.ql-snow {
+  border: 1px solid var(--line-strong);
+  border-top: 0;
+  border-radius: 0 0 var(--r-md) var(--r-md);
+  background: var(--stone-900);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  color: var(--carrara);
+  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.doc-form .ql-container.ql-snow:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(63, 147, 167, .25); }
+.doc-form .ql-editor { min-height: 140px; line-height: var(--lh-body); }
+.doc-form .ql-editor.ql-blank::before { color: var(--text-subtle); font-style: normal; }
+.doc-form .ql-snow .ql-stroke { stroke: var(--text-muted); }
+.doc-form .ql-snow .ql-fill { fill: var(--text-muted); }
+.doc-form .ql-snow .ql-picker { color: var(--text-muted); }
+.doc-form .ql-snow button:hover .ql-stroke,
+.doc-form .ql-snow button.ql-active .ql-stroke,
+.doc-form .ql-snow .ql-picker-label:hover .ql-stroke,
+.doc-form .ql-snow .ql-picker-label.ql-active .ql-stroke { stroke: var(--carrara); }
+.doc-form .ql-snow button:hover .ql-fill,
+.doc-form .ql-snow button.ql-active .ql-fill { fill: var(--carrara); }
+.doc-form .ql-snow .ql-picker-label:hover,
+.doc-form .ql-snow .ql-picker-label.ql-active,
+.doc-form .ql-snow .ql-picker-item:hover,
+.doc-form .ql-snow .ql-picker-item.ql-selected { color: var(--carrara); }
+.doc-form .ql-snow.ql-toolbar button,
+.doc-form .ql-snow .ql-toolbar button { border-radius: var(--r-xs); }
+.doc-form .ql-snow.ql-toolbar button:hover,
+.doc-form .ql-snow.ql-toolbar button:focus-visible { background: var(--stone-800); }
+.doc-form .ql-snow .ql-picker-options {
+  background: var(--stone-850);
+  border: var(--border-strong) !important;
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-md);
+}
+.doc-form .ql-snow .ql-picker.ql-expanded .ql-picker-label { border-color: var(--line-strong); border-radius: var(--r-xs); }
+.doc-form .ql-editor a { color: var(--accent-soft); }
+
+/* ---------- Bancada de pré-visualização ---------- */
+.preview-panel { overflow: hidden; }
+.preview-panel .panel-head .badge { font-family: var(--font-mono); font-weight: 500; }
+#previewContainer {
+  padding: var(--sp-6);
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .035), transparent 60%),
+    var(--stone-950);
+  overflow: auto;
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  scroll-margin-top: calc(var(--topbar-h) + 72px); /* não esconder a prévia sob a topbar */
+}
+/* A folha recebe sombra apenas na tela; o PDF captura #contrato isoladamente. */
+#previewContainer #contrato .doc { box-shadow: 0 1px 0 rgba(255, 255, 255, .06), 0 18px 40px rgba(0, 0, 0, .55); }
+#previewContainer.is-fresh { animation: rise-in var(--dur-slow) var(--ease-out); }
+
+.empty-preview {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-2);
+  max-width: 340px;
+  margin: var(--sp-4) auto;
+  padding: var(--sp-8) var(--sp-6);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-sm);
+  aspect-ratio: 210 / 260;
+  align-content: center;
+  text-align: center;
+  color: var(--text-muted);
+}
+.empty-preview span { font-size: var(--fs-xs); font-weight: 600; color: var(--text-subtle); }
+.empty-preview h2 { margin: 0; font-size: var(--fs-lg); color: var(--carrara); }
+.empty-preview p { margin: 0; font-size: var(--fs-sm); line-height: var(--lh-body); }
+
+/* Lado a lado apenas quando há largura para a folha A4 */
+@media (min-width: 1640px) {
+  .doc-workspace { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .preview-panel { position: sticky; top: calc(var(--topbar-h) + var(--sp-6)); }
+  #previewContainer { max-height: calc(100vh - var(--topbar-h) - 120px); }
+  .form-section { grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); }
+}
+@media (max-width: 1100px) {
+  .form-section { grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); }
+}
+@media (max-width: 767px) {
+  .form-section { padding: var(--sp-5) var(--sp-4); }
+  .form-grid { grid-template-columns: minmax(0, 1fr); }
+  .span-2, .span-3, .span-4 { grid-column: 1 / -1; }
+  .form-actions { position: static; padding: var(--sp-4); background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .form-actions .btn { flex: 1 1 100%; }
+  .form-actions .novo-documento { margin-left: 0; }
+  #previewContainer { padding: var(--sp-3); }
+}

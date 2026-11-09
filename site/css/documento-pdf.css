@@ -1,0 +1,177 @@
+/* ==========================================================================
+   Documento e PDF  ·  NÃO EDITAR SEM REVISAR O PDF GERADO
+   Regras copiadas literalmente do geral.css original. Elas definem a prévia
+   (#contrato) e o conteúdo capturado pelo html2pdf.js. Mantê-las isoladas
+   garante que o redesign da interface não altere paginação nem conteúdo.
+   ========================================================================== */
+:root{ --brand:#1f9d55; } /* JD padrão; empresas.js/contrato.js sobrescrevem */
+
+/* Herança que antes vinha do <body> do geral.css: fixada aqui para que a
+   tipografia do documento continue Inter mesmo com a nova fonte da interface. */
+#contrato{ font-family:Inter,system-ui,sans-serif; letter-spacing:normal; color-scheme:light; }
+
+  /* ====== DOCUMENTO (CENTRALIZAÇÃO REAL - A4 FEEL) ====== */
+  #contrato .doc{
+    background:#fff;
+    margin: 0 auto;
+    width: 190mm;       /* miolo A4 com respiro */
+    padding: 12mm;      /* margem interna */
+  }
+
+  #contrato{
+    font-size:14px;
+    line-height:1.6;
+    color:#222;
+  }
+
+  #contrato header{
+    text-align:center;
+    margin-bottom:20px;
+  }
+
+  #contrato h2{
+    font-size:20px;
+    margin:8px 0 6px;
+    color: var(--brand);
+    font-weight:800;
+    letter-spacing: -0.2px;
+  }
+
+  .titulo-01{
+    font-size:17px;
+    margin-top:18px;
+    font-weight:800;
+    color: var(--brand);
+    border-left:5px solid var(--brand);
+    padding-left:10px;
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  .sub-titulo{
+    margin-top:8px;
+    font-size:14px;
+  }
+
+  #contrato *{
+    white-space:normal !important;
+    word-break:break-word;
+  }
+
+  .contratado{
+    font-size:13px;
+    line-height:1.35;
+    margin-bottom:6px;
+  }
+
+  /* seção “inteligente”: tenta não quebrar no meio */
+  .secao{
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+
+  body.pdf-mode #contrato .doc{
+    width: 190mm !important;
+    margin: 0 auto !important;
+    padding: 12mm !important;
+  }
+
+  /* ---------- QUEBRAS / PAGINAÇÃO ---------- */
+  .keep-together,
+  .keep-together *{
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  .keep-with-next{
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  .page-break{
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+
+  /* ---------- ASSINATURAS (COM ESPAÇAMENTO MELHOR) ---------- */
+  .bloco-final{
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+    margin-top: 38px;        /* MAIS espaço em cima */
+    padding-top: 10px;       /* respiro interno (opcional) */
+    padding-bottom: 28px;    /* MAIS espaço em baixo */
+  }
+
+.bloco-final h3{
+  text-align:center;
+  margin:40px 0 120px; /* ↑ ↑ mais espaço em cima e embaixo */
+  font-weight:800;
+  letter-spacing: 0.5px;
+}
+
+  .assinaturas{
+    margin-top:26px;         /* mais espaço antes das linhas */
+    margin-bottom:26px;      /* mais espaço depois das assinaturas */
+    display:flex !important;
+    justify-content:space-between;
+    gap: 18mm;
+    align-items:flex-start;
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  .assinatura-item{
+    width: 78mm;
+    text-align:center;
+    padding: 0 2mm;
+    box-sizing:border-box;
+  }
+
+  .assinatura-linha{
+    width:100%;
+    border-top:2px solid #000;
+    margin:0 auto 10px auto;
+  }
+
+  .assinatura-nome{ font-weight:800; margin:0; }
+  .assinatura-doc{ margin:4px 0 0 0; font-size:13px; }
+
+  .dataFinal{
+    text-align:left;
+    margin-top:28px;         /* mais espaço antes da data */
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+
+  /* pra caber melhor no celular sem quebrar tudo */
+  @media (max-width: 520px){
+    #contrato .doc{
+      width: 100%;
+      padding: 16px;
+    }
+    .assinaturas{
+      flex-direction:column;
+      gap: 20px;
+    }
+    .assinatura-item{
+      width: 100%;
+    }
+  }
+
+
+body:not(.pdf-mode) #contrato .doc{width:100%;max-width:190mm}
+body:not(.pdf-mode) .assinatura-item{width:50%;min-width:0}
+
+@media(max-width:650px){body:not(.pdf-mode) #contrato .doc{padding:16px}body:not(.pdf-mode) .assinaturas{flex-direction:column;gap:38px}body:not(.pdf-mode) .assinatura-item{width:100%}}
+
+body.pdf-mode .assinaturas{flex-direction:row!important;gap:18mm!important}body.pdf-mode .assinatura-item{width:78mm!important}
+
+/* PDF: cláusulas fluem entre folhas; somente blocos pequenos são mantidos inteiros. */
+body.pdf-mode #contrato .doc{padding:4mm 10mm!important}
+body.pdf-mode .bloco-final{margin-top:20px;padding-top:0;padding-bottom:0}
+body.pdf-mode .bloco-final h3{margin:16px 0 0}
+body.pdf-mode .assinaturas{margin:0 0 16px;padding-top:18mm;break-inside:avoid!important;page-break-inside:avoid!important}
+body.pdf-mode .pdf-paragrafos{margin:1em 0}
+body.pdf-mode .pdf-paragrafos p{margin:0}

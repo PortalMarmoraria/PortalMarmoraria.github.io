@@ -9,7 +9,7 @@
     document.documentElement.style.setProperty("--brand", empresa.cor);
     document.title = `Contrato - ${empresa.nome}`;
     document.getElementById("empresaBadge").textContent = empresa.nome;
-    document.getElementById("tituloForm").textContent = `Gerador de Contrato - ${empresa.nome}`;
+    document.getElementById("tituloForm").textContent = new URLSearchParams(location.search).has("editar") ? "Editar contrato" : "Novo contrato";
 
     // ====== FUNÇÕES DE MÁSCARA ======
     function onlyDigits(v){ return (v || "").replace(/\D/g, ""); }

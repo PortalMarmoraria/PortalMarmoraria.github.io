@@ -7,33 +7,54 @@ function bloquear(valor){
   ocupado=valor;
   document.getElementById("gestao").inert=valor;
 }
+let paginaUsuariosDados=[];
+function usuarioDescricao(usuario){return usuario.principal?"Admin principal":Banco.nomesPerfis[usuario.perfil]||"Sem acesso";}
+function renderizarUsuarios(){
+  const busca=(document.getElementById("buscarUsuarios")?.value||"").trim().toLocaleLowerCase("pt-BR");
+  const perfilFiltro=document.getElementById("filtrarPerfil")?.value||"";
+  const visiveis=paginaUsuariosDados.filter(u=>(!perfilFiltro||u.perfil===perfilFiltro)&&(!busca||`${u.nome} ${u.email}`.toLocaleLowerCase("pt-BR").includes(busca)));
+  const corpo=document.getElementById("usuarios");corpo.replaceChildren();
+  for(const usuario of visiveis){
+    const tr=document.createElement("tr");
+    const celula=(rotulo,classe="")=>{const td=document.createElement("td");td.dataset.label=rotulo;if(classe)td.className=classe;tr.append(td);return td;};
+    const tdNome=celula("Nome");
+    const pessoa=document.createElement("a");pessoa.className="person";// Abre na mesma guia: a sessão fica no sessionStorage, que não é compartilhado com guias abertas com noopener.
+    pessoa.href=`usuario-detalhes.html?id=${encodeURIComponent(usuario.id)}`;
+    const avatar=document.createElement("span");avatar.className="avatar is-sm";avatar.setAttribute("aria-hidden","true");avatar.textContent=(usuario.nome||"U").trim().slice(0,1).toUpperCase();
+    const nome=document.createElement("span");nome.textContent=usuario.nome||"Usuário";
+    pessoa.append(avatar,nome);tdNome.append(pessoa);
+    celula("E-mail","muted").textContent=usuario.email||"—";
+    const papel=document.createElement("span");papel.className="role-badge"+(usuario.principal?" is-principal":"");papel.textContent=usuarioDescricao(usuario);celula("Perfil").append(papel);
+    const celEmp=celula("Empresas");const empresas=usuario.empresas||[];
+    if(empresas.length){const chips=document.createElement("span");chips.className="chips";for(const e of empresas){const c=document.createElement("span");c.className=`company-badge ${["MS","JD"].includes(e)?e.toLowerCase():""}`;c.textContent=e;chips.append(c);}celEmp.append(chips);}
+    else{celEmp.textContent="Sem empresa";celEmp.classList.add("muted");}
+    const pill=document.createElement("span");pill.className="state-pill "+(usuario.ativo?"is-active":"is-inactive");pill.textContent=usuario.ativo?"Ativo":"Inativo";celula("Status").append(pill);
+    const acoesTd=celula("Ações","row-actions-cell");const acoes=document.createElement("div");acoes.className="row-actions";acoesTd.append(acoes);
+    const abrir=document.createElement("a");abrir.href=pessoa.href;abrir.textContent="Detalhes";abrir.className="btn btn-sm btn-ghost";abrir.setAttribute("aria-label",`Detalhes de ${usuario.nome||"usuário"}`);acoes.append(abrir);
+    const editar=document.createElement("button");editar.type="button";editar.textContent="Editar";editar.className="btn btn-sm";editar.setAttribute("aria-label",`Editar ${usuario.nome||"usuário"}`);editar.addEventListener("click",()=>abrirEdicao(usuario));acoes.append(editar);
+    const senha=document.createElement("button");senha.type="button";senha.textContent="Senha";senha.className="btn btn-sm";senha.setAttribute("aria-label",`Redefinir senha de ${usuario.nome||"usuário"}`);senha.addEventListener("click",()=>abrirRedefinicao(usuario));acoes.append(senha);
+    const excluir=document.createElement("button");excluir.type="button";excluir.textContent="Excluir";excluir.className="btn btn-sm btn-danger";excluir.disabled=!!usuario.principal;excluir.title=usuario.principal?"A conta principal não pode ser excluída":"Excluir conta";excluir.setAttribute("aria-label",usuario.principal?"A conta principal não pode ser excluída":`Excluir conta de ${usuario.nome||"usuário"}`);excluir.addEventListener("click",()=>excluirUsuario(usuario));acoes.append(excluir);
+    corpo.append(tr);
+  }
+  if(!visiveis.length){
+    const tr=document.createElement("tr");tr.className="table-empty";const td=document.createElement("td");td.colSpan=6;
+    const box=document.createElement("div");box.className="empty-state";
+    const forte=document.createElement("strong");forte.textContent=paginaUsuariosDados.length?"Nenhuma conta encontrada":"Nenhuma conta nesta página";
+    const p=document.createElement("p");p.textContent=paginaUsuariosDados.length?"A busca e o filtro valem para a página atual. Ajuste os termos ou mude de página.":"Use Adicionar usuário para cadastrar a primeira conta.";
+    box.append(forte,p);td.append(box);tr.append(td);corpo.append(tr);
+  }
+  document.getElementById("filteredLabel").textContent=visiveis.length===1?"1 conta nesta página":`${visiveis.length} contas nesta página`;
+  document.getElementById("countBadge").textContent=String(paginaUsuariosDados.length);
+}
 async function carregarUsuarios(){
   const resposta=await GestaoUsuarios.chamar({acao:"listar",pagina:paginaUsuarios});
-  const corpo=document.getElementById("usuarios");corpo.replaceChildren();
-  for(const usuario of resposta.usuarios){
-    const linha=document.createElement("tr");
-    for(const valor of [usuario.nome,usuario.email,usuario.principal?"Admin principal":Banco.nomesPerfis[usuario.perfil] || "Sem acesso ao portal",usuario.empresas?.join(" / ") || "Sem empresa",usuario.ativo?"Ativo":"Sem acesso"]){
-      const celula=document.createElement("td");celula.textContent=valor;linha.appendChild(celula);
-    }
-    const celula=document.createElement("td"),botao=document.createElement("button");
-    botao.type="button";botao.textContent="Redefinir senha";
-    botao.addEventListener("click",()=>{
-      if(ocupado)return;
-      alvo=usuario;document.getElementById("formRedefinir").reset();erroSenha.textContent="";
-      document.getElementById("usuarioAlvo").textContent=`Conta: ${usuario.email}. Informe a nova senha e confirme para substituir a atual.`;
-      dialogSenha.showModal();document.getElementById("novaSenha").focus();
-    });celula.appendChild(botao);
-    const editar=document.createElement("button");editar.type="button";editar.textContent="Editar";
-    editar.addEventListener("click",()=>abrirEdicao(usuario));celula.appendChild(editar);
-    const excluir=document.createElement("button");excluir.type="button";excluir.textContent="Excluir";excluir.disabled=usuario.principal;
-    excluir.title=usuario.principal?"A conta principal não pode ser excluída":"Excluir conta";
-    excluir.addEventListener("click",()=>excluirUsuario(usuario));celula.appendChild(excluir);
-    linha.appendChild(celula);corpo.appendChild(linha);
-  }
+  paginaUsuariosDados=resposta.usuarios||[];
+  renderizarUsuarios();
   document.getElementById("pagina").textContent=`Página ${paginaUsuarios}`;
   document.getElementById("anterior").disabled=paginaUsuarios===1;
   document.getElementById("proxima").disabled=!resposta.temProxima;
 }
+
 async function atualizar(){
   if(ocupado || !pronto)return;
   bloquear(true);statusUsuarios.textContent="Carregando usuários…";
@@ -72,6 +93,11 @@ document.getElementById("formRedefinir").addEventListener("submit",async evento=
   }catch(erro){erroSenha.textContent=erro.message;}
   finally{senha.value="";confirmacao.value="";alterandoSenha=false;document.getElementById("salvarSenha").disabled=false;document.getElementById("cancelar").disabled=false;bloquear(false);}
 });
+function abrirRedefinicao(usuario){
+  if(ocupado)return;alvo=usuario;
+  document.getElementById("usuarioAlvo").textContent=`Conta: ${usuario.nome||"Usuário"} · ${usuario.email||""}. A conta, o perfil e os documentos são preservados.`;
+  erroSenha.textContent="";dialogSenha.showModal();document.getElementById("novaSenha").focus();
+}
 dialogSenha.addEventListener("cancel",evento=>{if(alterandoSenha)evento.preventDefault();});
 dialogSenha.addEventListener("close",()=>{document.getElementById("formRedefinir").reset();alvo=null;});
 document.getElementById("cancelar").addEventListener("click",()=>dialogSenha.close());
@@ -116,7 +142,7 @@ document.getElementById("formEditar").addEventListener("submit",async e=>{
 });
 async function excluirUsuario(usuario){
   if(ocupado||usuario.principal)return;
-  if(!confirm(`Excluir definitivamente a conta ${usuario.email}? Os documentos serão preservados. Esta ação não pode ser desfeita.`))return;
+  if(!(await UI.confirmar({titulo:"Excluir conta?",mensagem:`Excluir definitivamente a conta ${usuario.email}? Os documentos serão preservados. Esta ação não pode ser desfeita.`,confirmar:"Excluir conta",perigo:true})))return;
   bloquear(true);statusUsuarios.textContent="Excluindo usuário…";
   try{await GestaoUsuarios.chamar({acao:"excluir",id:usuario.id,confirmacao:usuario.id});statusUsuarios.textContent="Conta excluída. Documentos preservados.";
     try{await carregarUsuarios();}catch{statusUsuarios.textContent+=" Clique em Atualizar lista para conferir.";}

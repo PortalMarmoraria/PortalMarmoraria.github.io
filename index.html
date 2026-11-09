@@ -1,1 +1,134 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#162c28"><title>Portal Marmoraria</title><link rel="stylesheet" href="site/index.css"><style>html.auth-pending body{visibility:hidden}</style><script>document.documentElement.classList.add("auth-pending");</script></head><body><a class="skip" href="#conteudo">Pular para o conteúdo</a><header class="site-header"><a class="wordmark" href="index.html"><span class="brand-icon">M</span> Portal Marmoraria</a><a class="header-note" href="site/historico.html">Meus documentos →</a></header><main id="conteudo" class="container"><div class="step">01 / ESCOLHA A EMPRESA</div><h1>Documentos bem feitos.<br><span>Rotina mais simples.</span></h1><p class="intro">Crie contratos, recibos e orçamentos com a identidade da sua marmoraria. Selecione uma empresa para começar.</p><div class="empresas"><a class="empresa ms" href="site/tipo.html?empresa=MS"><div class="card-top"><img src="img/MS.png" alt="Logo MS Marmoraria"><span class="tag">MS</span></div><h2>MS Marmoraria</h2><p>Mármores e granitos</p><span class="card-action">Selecionar empresa <span aria-hidden="true">↗</span></span></a><a class="empresa jd" href="site/tipo.html?empresa=JD"><div class="card-top"><img src="img/JD.png" alt="Logo JD Marmoraria"><span class="tag">JD</span></div><h2>JD Marmoraria</h2><p>Mármores e granitos</p><span class="card-action">Selecionar empresa <span aria-hidden="true">↗</span></span></a></div><div class="bottom-note">Uma identidade para cada empresa. Um lugar para criar seus documentos.</div></main><footer class="site-footer">© <span id="ano"></span> · Desenvolvido por <strong>Eduardo Mathias</strong></footer><script src="site/js/index.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/dist/umd/supabase.js"></script><script src="site/js/config.js"></script><script src="site/js/banco.js"></script><script src="site/js/proteger.js"></script><script src="site/js/gestao-api.js"></script><script src="site/js/menu-admin.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0b0c">
+  <title>Início · Portal Marmoraria</title>
+  <link rel="icon" type="image/png" href="img/portal-simbolo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="site/css/tokens.css">
+  <link rel="stylesheet" href="site/css/base.css">
+  <link rel="stylesheet" href="site/css/layout.css">
+  <link rel="stylesheet" href="site/css/components.css">
+  <link rel="stylesheet" href="site/css/pages.css">
+  <script>document.documentElement.classList.add('auth-pending');</script>
+</head>
+<body data-page="inicio">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar" aria-label="Menu lateral"></aside>
+
+    <div class="app-main">
+      <header class="topbar">
+        <div class="topbar-context"><strong>Início</strong></div>
+      </header>
+
+      <main id="conteudo" class="page" tabindex="-1">
+        <header class="page-header">
+          <div class="page-header-text">
+            <h1 class="page-title" id="welcomeName">Olá</h1>
+            <p class="page-lead">Escolha a empresa para criar um contrato, recibo ou orçamento, ou consulte os documentos mais recentes.</p>
+          </div>
+        </header>
+
+        <div class="home-grid">
+          <div class="home-main">
+            <section aria-labelledby="tituloEmpresas">
+              <div class="section-head">
+                <h2 class="section-title" id="tituloEmpresas">Empresas</h2>
+                <span class="section-meta" id="companyCount">Carregando empresas…</span>
+              </div>
+
+              <div class="company-grid empresas">
+                <a class="empresa company-card is-ms" href="site/tipo.html?empresa=MS" aria-describedby="docsMS">
+                  <div class="company-card-top">
+                    <span class="company-logo"><img src="img/MS.png" alt="" width="56" height="56"></span>
+                    <span class="company-badge ms">MS</span>
+                  </div>
+                  <h3 class="company-name">MS Marmoraria</h3>
+                  <p class="company-desc">Mármores e granitos</p>
+                  <p class="company-docs" id="docsMS">Verificando permissões…</p>
+                  <span class="company-cta">Selecionar empresa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                </a>
+
+                <a class="empresa company-card is-jd" href="site/tipo.html?empresa=JD" aria-describedby="docsJD">
+                  <div class="company-card-top">
+                    <span class="company-logo"><img src="img/JD.png" alt="" width="56" height="56"></span>
+                    <span class="company-badge jd">JD</span>
+                  </div>
+                  <h3 class="company-name">JD Marmoraria</h3>
+                  <p class="company-desc">Mármores e granitos</p>
+                  <p class="company-docs" id="docsJD">Verificando permissões…</p>
+                  <span class="company-cta">Selecionar empresa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                </a>
+              </div>
+              <div class="empty-state panel" id="semEmpresas" hidden>
+                <strong>Nenhuma empresa liberada</strong>
+                <p>Sua conta ainda não tem acesso à MS ou à JD. Peça ao administrador para liberar a empresa desejada.</p>
+              </div>
+            </section>
+
+            <section class="panel recent-panel" aria-labelledby="tituloRecentes">
+              <div class="panel-head">
+                <div>
+                  <h2 class="panel-title" id="tituloRecentes">Documentos recentes</h2>
+                  <p class="panel-sub" id="previewTotal">Últimos registros que seu perfil pode consultar</p>
+                </div>
+                <a class="panel-link" href="site/historico.html">Abrir histórico <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+              <div class="recent-list" id="previewDocuments" aria-live="polite" aria-busy="true">
+                <div class="recent-row is-skeleton" aria-hidden="true"><span class="skeleton" style="width:46%"></span><span class="skeleton" style="width:18%"></span></div>
+                <div class="recent-row is-skeleton" aria-hidden="true"><span class="skeleton" style="width:38%"></span><span class="skeleton" style="width:14%"></span></div>
+                <div class="recent-row is-skeleton" aria-hidden="true"><span class="skeleton" style="width:52%"></span><span class="skeleton" style="width:16%"></span></div>
+                <span class="sr-only">Carregando documentos…</span>
+              </div>
+            </section>
+          </div>
+
+          <aside class="home-side" aria-label="Sua conta">
+            <section class="panel profile-card">
+              <div class="profile-head">
+                <span class="avatar is-lg" id="profileAvatar" aria-hidden="true">·</span>
+                <div class="profile-id">
+                  <strong id="profileName">Usuário</strong>
+                  <span id="profileRoleCard">Perfil</span>
+                </div>
+              </div>
+              <dl class="info-list">
+                <div><dt>Status</dt><dd><span class="badge badge-success"><span class="dot"></span>Conta ativa</span></dd></div>
+                <div><dt>Empresas liberadas</dt><dd id="empresasLiberadas">—</dd></div>
+                <div><dt>Pode criar</dt><dd id="podeCriar">—</dd></div>
+              </dl>
+            </section>
+
+            <nav class="panel shortcut-list" aria-label="Atalhos">
+              <a class="shortcut" href="site/historico.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+                <span><strong>Meus documentos</strong><small>Pesquisar, abrir PDFs e editar</small></span>
+              </a>
+              <a class="shortcut" id="atalhoUsuarios" href="site/usuarios.html" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>
+                <span><strong>Gerenciar usuários</strong><small>Contas, perfis e empresas</small></span>
+              </a>
+            </nav>
+          </aside>
+        </div>
+      </main>
+
+      <footer class="app-footer">© <span id="ano"></span> Portal Marmoraria · Desenvolvido por <strong>Eduardo Mathias</strong></footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/dist/umd/supabase.js"></script>
+  <script src="site/js/config.js"></script>
+  <script src="site/js/banco.js"></script>
+  <script src="site/js/ui.js"></script>
+  <script src="site/js/proteger.js"></script>
+  <script src="site/js/gestao-api.js"></script>
+  <script src="site/js/index.js"></script>
+</body>
+</html>

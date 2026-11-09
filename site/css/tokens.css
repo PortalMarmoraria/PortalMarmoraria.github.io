@@ -1,0 +1,123 @@
+/* ==========================================================================
+   Portal Marmoraria · Design tokens
+   Fonte única de cores, tipografia, espaçamento, raios, bordas e movimento.
+   Superfícies inspiradas em granito preto polido; ações em "branco Carrara";
+   acento petróleo extraído do logo oficial. MS e JD aparecem apenas quando
+   identificam a empresa.
+   ========================================================================== */
+:root {
+  color-scheme: dark;
+
+  /* Superfícies (granito) */
+  --stone-950: #0a0b0c;   /* fundo da aplicação */
+  --stone-900: #101214;   /* sidebar e painéis */
+  --stone-850: #15181a;   /* painéis elevados */
+  --stone-800: #1b1f22;   /* campos e hover */
+  --stone-750: #22272b;   /* hover forte / seleção */
+  --line: #252a2e;        /* linha de corte (bordas) */
+  --line-strong: #343a3f;
+
+  /* Texto */
+  --carrara: #eef0ee;     /* texto prioritário e ação primária */
+  --text: #e3e6e5;
+  --text-muted: #9aa3a7;
+  --text-subtle: #80898e; /* textos auxiliares; ≥ 4.5:1 sobre todas as superfícies */
+
+  /* Acento do Portal (petróleo do logo) */
+  --accent: #3f93a7;
+  --accent-strong: #2a728a;
+  --accent-soft: #86c6d4;
+  --accent-tint: rgba(63, 147, 167, .14);
+
+  /* Empresas */
+  --ms: #d63a41;
+  --ms-text: #f08a8f;
+  --ms-tint: rgba(214, 58, 65, .14);
+  --jd: #2fa866;
+  --jd-text: #74d39f;
+  --jd-tint: rgba(47, 168, 102, .14);
+
+  /* Semânticas */
+  --success: #4cc38a;
+  --success-tint: rgba(76, 195, 138, .12);
+  --danger: #f06262;
+  --danger-strong: #d94848;
+  --danger-tint: rgba(240, 98, 98, .12);
+  --warning: #e3b25a;
+  --warning-tint: rgba(227, 178, 90, .12);
+  --info: #6cb8d6;
+  --info-tint: rgba(108, 184, 214, .12);
+
+  --focus: #9fd3df;
+
+  /* Tipografia */
+  --font-sans: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 14px;
+  --fs-base: 15px;
+  --fs-lg: 17px;
+  --fs-xl: 20px;
+  --fs-2xl: 26px;
+  --fs-3xl: 32px;
+  --lh-tight: 1.15;
+  --lh-snug: 1.35;
+  --lh-body: 1.55;
+  --tracking-tight: -0.02em;
+  --tracking-label: 0.01em;
+
+  /* Espaçamento (base 4) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* Raios e bordas */
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-pill: 999px;
+  --border: 1px solid var(--line);
+  --border-strong: 1px solid var(--line-strong);
+
+  /* Profundidade: borda polida no topo + sombra curta */
+  --edge: inset 0 1px 0 rgba(255, 255, 255, .035);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, .35);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, .55);
+
+  /* Layout */
+  --sidebar-w: 248px;
+  --sidebar-rail: 76px;
+  --topbar-h: 64px;
+  --content-max: 1360px;
+  --control-h: 42px;
+  --control-h-sm: 34px;
+
+  /* Movimento */
+  --dur-fast: 120ms;
+  --dur: 180ms;
+  --dur-slow: 260ms;
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --ease-in-out: cubic-bezier(.4, 0, .2, 1);
+
+  /* Camadas */
+  --z-sidebar: 40;
+  --z-backdrop: 35;
+  --z-sheet: 50;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur: 0ms;
+    --dur-slow: 0ms;
+  }
+}

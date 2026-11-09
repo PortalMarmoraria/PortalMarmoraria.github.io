@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0a0b0c">
+  <title>Detalhes do usuário · Portal Marmoraria</title>
+  <link rel="icon" type="image/png" href="../img/portal-simbolo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="usuarios">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar" aria-label="Menu lateral"></aside>
+    <div class="app-main">
+      <header class="topbar">
+        <nav class="topbar-context" aria-label="Você está em">
+          <a href="usuarios.html">Usuários</a><span class="sep" aria-hidden="true">/</span><strong>Detalhes da conta</strong>
+        </nav>
+      </header>
+
+      <main id="conteudo" class="page" tabindex="-1">
+        <a class="back-link" href="usuarios.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Voltar para usuários</a>
+        <header class="page-header">
+          <div class="page-header-text">
+            <h1 class="page-title">Detalhes do usuário</h1>
+            <p class="page-lead">Informações e permissões desta conta.</p>
+          </div>
+        </header>
+
+        <p class="status-msg" id="detailStatus" role="status" aria-live="polite" data-status>Carregando conta…</p>
+
+        <section id="detailSection" class="user-layout" hidden>
+          <div class="user-main">
+            <section class="panel user-hero" aria-label="Identificação">
+              <span class="avatar is-lg" id="detailAvatar" aria-hidden="true">U</span>
+              <div class="user-hero-text">
+                <h2 id="detailName">—</h2>
+                <p id="detailEmailTop">—</p>
+              </div>
+              <div class="user-hero-badges">
+                <span class="role-badge" id="heroRole">—</span>
+                <span class="state-pill" id="heroStatus">—</span>
+              </div>
+            </section>
+
+            <section class="panel" aria-labelledby="tituloConta">
+              <div class="panel-head"><h3 class="panel-title" id="tituloConta">Informações da conta</h3></div>
+              <dl class="field-grid" style="border-top:0">
+                <div style="border-top:0"><dt>Nome completo</dt><dd id="infoName">—</dd></div>
+                <div style="border-top:0"><dt>E-mail de acesso</dt><dd id="infoEmail">—</dd></div>
+                <div><dt>Perfil</dt><dd id="infoRole">—</dd></div>
+                <div><dt>Status</dt><dd id="infoStatus">—</dd></div>
+              </dl>
+            </section>
+
+            <section class="panel" aria-labelledby="tituloEmpresas">
+              <div class="panel-head"><h3 class="panel-title" id="tituloEmpresas">Empresas autorizadas</h3></div>
+              <dl class="field-grid">
+                <div style="border-top:0"><dt><span class="company-badge ms">MS</span> MS Marmoraria</dt><dd id="infoMS">—</dd></div>
+                <div style="border-top:0"><dt><span class="company-badge jd">JD</span> JD Marmoraria</dt><dd id="infoJD">—</dd></div>
+              </dl>
+            </section>
+
+            <section class="panel" aria-labelledby="tituloSeguranca">
+              <div class="panel-head"><h3 class="panel-title" id="tituloSeguranca">Segurança e permissões</h3></div>
+              <p class="note">As ações de administração são validadas no servidor pelo Supabase. Esta página só pode ser acessada pelo administrador principal autorizado.</p>
+            </section>
+          </div>
+
+          <aside class="user-side" aria-label="Gerenciar conta">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h3 class="panel-title">Gerenciar conta</h3>
+                  <p class="panel-sub">Atualize nome, e-mail, perfil e empresas autorizadas.</p>
+                </div>
+              </div>
+              <div class="manage-actions">
+                <button id="showEdit" class="btn" type="button" aria-expanded="false" aria-controls="editCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg>Editar informações</button>
+                <button id="showPassword" class="btn" type="button" aria-expanded="false" aria-controls="passwordCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V8a4 4 0 0 1 8 0v2"/></svg>Redefinir senha</button>
+                <button id="detailDelete" class="btn btn-danger" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Excluir conta</button>
+              </div>
+              <p id="detailMessage" class="status-msg detail-message" role="status" aria-live="polite" data-status></p>
+            </section>
+
+            <section class="panel manage-card" id="editCard" hidden aria-labelledby="tituloEditarCard">
+              <div class="panel-head"><h3 class="panel-title" id="tituloEditarCard">Editar usuário</h3></div>
+              <form id="detailEdit" class="manage-form">
+                <div class="field"><label for="dNome">Nome</label><input class="input" id="dNome" required maxlength="120"></div>
+                <div class="field"><label for="dEmail">E-mail de acesso</label><input class="input" id="dEmail" type="email" required maxlength="254"></div>
+                <div class="field"><label for="dPerfil">Perfil</label><select class="select" id="dPerfil"><option value="colaborador">Colaborador</option><option value="comercial">Comercial</option><option value="financeiro">Financeiro</option><option value="admin">Administrador</option></select></div>
+                <fieldset class="fieldset"><legend>Empresas autorizadas</legend><div class="check-row"><label class="check"><input id="dMS" type="checkbox" value="MS"> MS Marmoraria</label><label class="check"><input id="dJD" type="checkbox" value="JD"> JD Marmoraria</label></div></fieldset>
+                <button type="submit" class="btn btn-primary">Salvar alterações</button>
+              </form>
+            </section>
+
+            <section class="panel manage-card" id="passwordCard" hidden aria-labelledby="tituloSenhaCard">
+              <div class="panel-head"><h3 class="panel-title" id="tituloSenhaCard">Redefinir senha</h3></div>
+              <form id="detailPassword" class="manage-form">
+                <div class="field"><label for="dSenha">Nova senha</label><input class="input" id="dSenha" type="password" required minlength="8" maxlength="72" autocomplete="new-password"></div>
+                <div class="field"><label for="dConfirmar">Confirmar senha</label><input class="input" id="dConfirmar" type="password" required minlength="8" maxlength="72" autocomplete="new-password"></div>
+                <button type="submit" class="btn btn-primary">Redefinir senha</button>
+              </form>
+            </section>
+          </aside>
+        </section>
+      </main>
+      <footer class="app-footer">© <span id="ano"></span> Portal Marmoraria · Desenvolvido por <strong>Eduardo Mathias</strong></footer>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/dist/umd/supabase.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/banco.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/gestao-api.js"></script>
+  <script src="js/usuario-detalhes.js"></script>
+</body>
+</html>
